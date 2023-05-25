@@ -1,17 +1,26 @@
-import Dependencies from "@/components/Dependencies";
-async function fetchData() {
-  const response = await fetch("http://localhost:3030/departaments");
-  const data = await response.json();
-  return data;
-}
+"use client";
+import { useEffect } from "react";
+import DependenciesCard from "@/components/DependenciesCard";
+import { useDependencies } from "@/context/DependenciesContext";
 
-export default async function DependenciasPage() {
-  const datos = await fetchData();
-  return (
-    <div>
-      <h1>Lista de Dependencias</h1>
+export default function DependenciasPage() {
+  const { dependencies, loadDependencies } = useDependencies();
 
-      <Dependencies datos={datos} />
-    </div>
-  );
+  useEffect(() => {
+    loadDependencies();
+  }, []);
+
+  // console.log(dependencies);
+  function renderMain() {
+    if (dependencies.length === 0)
+      return (
+        <div>
+          <h1>No existen Dependencias Disponibles</h1>
+        </div>
+      );
+    return <DependenciesCard  dependencies={dependencies} />
+    
+  }
+
+  return renderMain();
 }

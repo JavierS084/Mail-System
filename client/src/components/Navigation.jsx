@@ -12,7 +12,7 @@ export default function Navigation() {
       <div className="collapse navbar-collapse" id="navbarColor01">
         <ul className="navbar-nav me-auto">
           <li className="nav-item">
-            <Link className="nav-link active" href="/">Home
+            <Link className="nav-link " href="/">Home
               <span className="visually-hidden">(current)</span>
             </Link>
           </li>
