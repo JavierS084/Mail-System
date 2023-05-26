@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/database.js";
-import Departaments from "./departamentModel.js";
+import Dependencies from "./dependencyModel.js";
 import Groups from "./groupModel.js";
 import MailTypes from "./mailTypeModel.js";
 import Requests from "./requestModel.js";
@@ -66,7 +66,7 @@ const Mails = db.define('mails',{
             notEmpty: false
         }
     },
-    departamentId:{
+    dependencyId:{
         type: DataTypes.INTEGER,
         allowNull: false,
         validate:{
@@ -92,8 +92,8 @@ Mails.belongsTo(MailTypes, {foreignKey: 'mailTypeId'});
 Groups.hasMany(Mails);
 Mails.belongsTo(Groups, {foreignKey: 'groupId'});
 
-Departaments.hasMany(Mails);
-Mails.belongsTo(Departaments, {foreignKey: 'departamentId'});
+Dependencies.hasMany(Mails);
+Mails.belongsTo(Dependencies, {foreignKey: 'dependencyId'});
 
 Requests.hasMany(Mails);
 Mails.belongsTo(Requests, {foreignKey: 'requestId'});

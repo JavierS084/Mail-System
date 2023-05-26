@@ -1,6 +1,6 @@
 "use client";
 import { useEffect } from "react";
-import DependenciesCard from "@/components/DependenciesCard";
+import Tabs from "@/components/Tabs";
 import { useDependencies } from "@/context/DependenciesContext";
 
 export default function DependenciasPage() {
@@ -18,8 +18,7 @@ export default function DependenciasPage() {
           <h1>No existen Dependencias Disponibles</h1>
         </div>
       );
-    return <DependenciesCard  dependencies={dependencies} />
-    
+    return <Tabs dependencies={dependencies} />;
   }
 
   return renderMain();

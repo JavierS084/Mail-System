@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import Mail from "../models/mailModel.js";
 import MailType from "../models/mailTypeModel.js";
-import Departament from "../models/departamentModel.js";
+import Dependency from "../models/dependencyModel.js";
 import Request from "../models/requestModel.js";
 import Group from "../models/groupModel.js";
 
@@ -25,8 +25,8 @@ export const getAllMails = async (req, res) => {
                     required: true,
                 },
                 {
-                    model: Departament,
-                    attributes: ['id', 'departamento'],
+                    model: Dependencie,
+                    attributes: ['id', 'dependencia'],
                     required: true,
                 },
                 {
@@ -128,7 +128,7 @@ export const getMail = async (req, res) => {
                 model: MailType,
                 attributes: ['tipo'],
 
-                model: Departament,
+                model: Dependency,
                 attributes: ['departamento'],
 
                 model: Request,

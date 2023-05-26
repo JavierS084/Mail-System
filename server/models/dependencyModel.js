@@ -3,9 +3,9 @@ import db from "../config/database.js";
 
 const { DataTypes } = Sequelize;
 
-const Departaments = db.define('departaments', {
+const Dependencies = db.define('dependencies', {
     
-    departamento:{
+    dependencia:{
         type: DataTypes.STRING,
         allowNull: false,
         validate:{
@@ -17,4 +17,4 @@ const Departaments = db.define('departaments', {
 }, {
     freezeTableName: true,
 });
-export default Departaments;
+export default Dependencies;

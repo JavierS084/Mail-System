@@ -6,7 +6,7 @@ import SequelizeStore from "connect-session-sequelize";
 import userRoute from "./routes/userRoute.js";
 import authRoute from "./routes/authRoute.js";
 import requestRoutes from "./routes/requestRoutes.js";
-import departamentRoutes from "./routes/departamentRoutes.js";
+import dependencyRoutes from "./routes/dependencyRoutes.js";
 import typeRoutes from "./routes/typeRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
 import mailRoutes from "./routes/mailRoutes.js";
@@ -46,7 +46,7 @@ app.use(express.json());
 app.use(userRoute);
 app.use(authRoute);
 app.use(requestRoutes)
-app.use(departamentRoutes);
+app.use(dependencyRoutes);
 app.use(typeRoutes);
 app.use(groupRoutes);
 app.use(mailRoutes);

@@ -73,10 +73,10 @@ export default function DependenciesCard({ dependencies }) {
         <thead>
           <tr>
             <th>Accion</th>
-            <th scope="col" >
-              ID
+            <th scope="col">ID</th>
+            <th scope="col" onClick={() => Orden("id")}>
+              Dependencia
             </th>
-            <th scope="col" onClick={() => Orden('id')}>Dependencia</th>
             <th scope="col">Fecha de Creacion</th>
           </tr>
         </thead>
@@ -95,7 +95,7 @@ export default function DependenciesCard({ dependencies }) {
               </td>
 
               <td>{dependency.id}</td>
-              <td>{dependency.departamento}</td>
+              <td>{dependency.dependencia}</td>
               <td>{dependency.createdAt}</td>
             </tr>
           ))}
