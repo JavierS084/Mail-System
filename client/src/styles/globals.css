@@ -9,6 +9,12 @@ body {
 h1 {
   font-size: 1.75rem;
 }
-Tab {
-  
+
+.error{
+  color: red;
+  font-size: 18px;
 }
+
+
+
+

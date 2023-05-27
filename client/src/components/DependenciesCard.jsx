@@ -6,19 +6,20 @@ import Modal from "react-bootstrap/Modal";
 import { useDependencies } from "@/context/DependenciesContext";
 
 export default function DependenciesCard({ dependencies }) {
-  const { dependencies: dependencia, setDependencies } = useDependencies();
+  const { delDp, setDependencies } = useDependencies();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
   const [ordenAscendente, setOrdenAscendente] = useState(true);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  //const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     if (select.length === 0) {
       setAccion(false);
     }
+
     //pasando los 10 segundos se deshabilita el boton eliminar
     const timer = setTimeout(() => {
       setAccion(false);
@@ -39,7 +40,7 @@ export default function DependenciesCard({ dependencies }) {
   };
 
   function Orden(columna) {
-    const datosOrdenados = [...dependencia];
+    const datosOrdenados = [...dependencies];
 
     datosOrdenados.sort((datoA, datoB) => {
       if (datoA[columna] < datoB[columna]) {
@@ -56,20 +57,27 @@ export default function DependenciesCard({ dependencies }) {
   }
 
   return (
-    <>
+    <div className="row">
       <h1>Lista de Dependencias</h1>
-      <button
-        onClick={handleShow}
-        disabled={!accion}
-        type="button"
-        className="btn btn-danger"
-        data-bs-toggle="tooltip"
-        data-bs-placement="left"
-        data-bs-original-title="Tooltip on left"
-      >
-        Eliminar
-      </button>
-      <table className="table table-hover">
+      <div className="col-md-5">
+        <button
+          onClick={handleShow}
+          disabled={!accion}
+          type="button"
+          className="btn btn-danger m-1"
+        >
+          Eliminar
+        </button>
+        <button
+          type="button"
+          className="btn btn-warning m-1 px-4"
+          disabled={!accion}
+          onClick={() => router.push(`/dependencies/edit/${select}`)}
+        >
+          Editar
+        </button>
+      </div>
+      <table className="table table-hover mt-2">
         <thead>
           <tr>
             <th>Accion</th>
@@ -83,7 +91,7 @@ export default function DependenciesCard({ dependencies }) {
 
         <tbody>
           {dependencies.map((dependency) => (
-            <tr scope="row" key={dependency.id}>
+            <tr scope="row">
               <td>
                 <input
                   onChange={handleChange}
@@ -91,6 +99,7 @@ export default function DependenciesCard({ dependencies }) {
                   type="checkbox"
                   value={dependency.id}
                   id="flexCheckDefault"
+                  key={dependency.id}
                 />
               </td>
 
@@ -118,9 +127,18 @@ export default function DependenciesCard({ dependencies }) {
           <Button variant="secondary" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button>Entendido</Button>
+          <Button
+          variant="danger"
+          onClick={() => {
+            delDp(select);
+            handleClose();
+          }}
+            type="button"
+          >
+            Entendido
+          </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
