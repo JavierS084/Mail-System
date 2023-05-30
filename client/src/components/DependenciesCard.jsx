@@ -3,12 +3,15 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
+import { toast } from "react-hot-toast";
+
 import { useDependencies } from "@/context/DependenciesContext";
 
 export default function DependenciesCard({ dependencies }) {
   const { delDp, setDependencies } = useDependencies();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
+  //const [ selectedit , setSelectedit] = useState();
   const [ordenAscendente, setOrdenAscendente] = useState(true);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -16,22 +19,23 @@ export default function DependenciesCard({ dependencies }) {
   const router = useRouter();
 
   useEffect(() => {
-    if (select.length === 0) {
-      setAccion(false);
-    }
-
     //pasando los 10 segundos se deshabilita el boton eliminar
     const timer = setTimeout(() => {
       setAccion(false);
     }, 10000);
+    if (select.length === 0) {
+      setAccion(false);
+    }
 
     return () => clearTimeout(timer);
   }, [select]); //se refrezca por cada actualizacion
 
   const handleChange = (event) => {
     const { value, checked } = event.target;
-    if (checked) {
+    //console.log(value )
+    if (checked ) {
       setSelect([...select, value]);
+      console.log(value)
       setAccion(checked);
     } else {
       //pasa todos los datos menos los selecionados
@@ -58,7 +62,11 @@ export default function DependenciesCard({ dependencies }) {
 
   return (
     <div className="row">
+     
+      <div className="card">
       <h1>Lista de Dependencias</h1>
+
+        <hr/>
       <div className="col-md-5">
         <button
           onClick={handleShow}
@@ -91,7 +99,7 @@ export default function DependenciesCard({ dependencies }) {
 
         <tbody>
           {dependencies.map((dependency) => (
-            <tr scope="row">
+            <tr scope="row" key={dependency.id}>
               <td>
                 <input
                   onChange={handleChange}
@@ -131,6 +139,8 @@ export default function DependenciesCard({ dependencies }) {
           variant="danger"
           onClick={() => {
             delDp(select);
+            setSelect([])
+            toast.success('Se ha eliminado Correctamente');
             handleClose();
           }}
             type="button"
@@ -139,6 +149,7 @@ export default function DependenciesCard({ dependencies }) {
           </Button>
         </Modal.Footer>
       </Modal>
+      </div>
     </div>
   );
 }

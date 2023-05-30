@@ -1,12 +1,15 @@
 "use client";
 import { useState, useEffect } from "react";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 import DependenciesCard from "@/components/DependenciesCard";
-import DependenciesAdd from "@/components/DependenciesAdd";
+import DependenciesAdd from "@/components/DependenciesForm";
 import { useDependencies } from "@/context/DependenciesContext";
+import  Search  from "@/components/Search";
 
 export default function DependenciasPage() {
-  const { dependencies, loadDependencies, delDp } = useDependencies();
-  const [activeTab, setActiveTab] = useState(1);
+  const { dependencies, loadDependencies } = useDependencies();
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -14,11 +17,9 @@ export default function DependenciasPage() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [activeTab, dependencies]);
+  }, [ dependencies]);
 
-  const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
-  };
+
 
   function renderlista() {
     if (dependencies.length === 0) {
@@ -31,52 +32,44 @@ export default function DependenciasPage() {
       return <DependenciesCard dependencies={dependencies} />;
     }
   }
-
+//https://react-bootstrap.github.io/components/tabs/ para mejorar el tab
   return (
     <div>
-      <ul className="nav nav-tabs" role="tablist">
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link active"
-            data-bs-toggle="tab"
-            aria-selected="true"
-            role="tab"
-            isActive={activeTab === 1}
-            onClick={() => handleTabChange(1)}
-          >
-            Lista de Dependencias
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className="nav-link"
-            data-bs-toggle="tab"
-            aria-selected="false"
-            isActive={activeTab === 2}
-            tabindex="-1"
-            role="tab"
-            onClick={() => handleTabChange(2)}
-          >
-            Crear Dependecia
-          </button>
-        </li>
-      </ul>
-      <div id="myTabContent" className="tab-content">
-        <div
+      <Tabs
+      defaultActiveKey="listDependencies"
+      id="uncontrolled-tab-example"
+      className="mb-3"
+    >
+      <Tab eventKey="listDependencies" title="Dependencias" >
+      <div
           className="tab-pane fade active show"
           id="listadependencias"
           role="tabpanel"
         >
-          <article>{activeTab === 1 && renderlista()}</article>
+          <article>{renderlista()}</article>
         </div>
-        <div
+      </Tab>
+      <Tab eventKey="addDependency" title="Crear Dependencia">
+      <div
           className="tab-pane fade active show"
           id="createdependencies"
           role="tabpanel"
         >
-          {activeTab === 2 && <DependenciesAdd />}
+          {<DependenciesAdd />}
         </div>
-      </div>
+      </Tab>
+      <Tab eventKey="searchDependencia" title="Buscar Dependencia" >
+      <div
+          className="tab-pane fade active show"
+          id="searchdependencias"
+          role="tabpanel"
+        >
+          { <Search />}
+        </div>
+      </Tab>
+    </Tabs>
+    
+      
     </div>
   );
 }

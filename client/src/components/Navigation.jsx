@@ -20,9 +20,9 @@ export default function Navigation() {
         </button>
         <div className="collapse navbar-collapse" id="navbarColor01">
           <ul className="navbar-nav me-auto">
-            <li class="nav-item">
-              <Link class="nav-link" href="/">
-                Home <span class="visually-hidden">(current)</span>
+            <li className="nav-item">
+              <Link className="nav-link" href="/">
+                Home <span className="visually-hidden">(current)</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -68,17 +68,7 @@ export default function Navigation() {
               </div>
             </li>
           </ul>
-          <form className="d-flex">
-            <input
-              className="form-control me-sm-2"
-              type="search"
-              placeholder="Search"
-              data-listener-added_b611583e="true"
-            />
-            <button className="btn btn-secondary my-2 my-sm-0" type="submit">
-              Search
-            </button>
-          </form>
+          
         </div>
       </div>
     </nav>

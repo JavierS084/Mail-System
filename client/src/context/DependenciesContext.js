@@ -36,7 +36,7 @@ export const DependenciesProvider = ({ children }) => { // es el componente
     const crDp = async (depart) => {
         try {
             const response = await createDependency(depart);
-            setMsg(response.data.msg)
+            //setMsg(response.data.msg)
             console.log(response);
         } catch (error) {
             setMsg(error.response.data.msg);
