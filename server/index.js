@@ -51,7 +51,7 @@ app.use(typeRoutes);
 app.use(groupRoutes);
 app.use(mailRoutes);
 
-//store.sync();
+store.sync();
 
 const nDate = new Date().toLocaleString('es-ES', {
     timeZone: 'America/Asuncion'

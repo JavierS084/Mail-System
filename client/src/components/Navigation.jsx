@@ -1,6 +1,52 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
+import Button from "react-bootstrap/Button";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { IconHomeCog, IconUserCircle } from '@tabler/icons-react';
 
 export default function Navigation() {
+  const options = [
+    {
+      name: "end",
+      scroll: true,
+      backdrop: true,
+    },
+  ];
+
+  function OffCanvasExample({ name, ...props }) {
+    const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const toggleShow = () => setShow((s) => !s);
+    return (
+      <>
+        <Button variant="primary" onClick={toggleShow} className="me-2">
+          <IconHomeCog color="white" size={24 }  />
+        </Button>
+        <Offcanvas show={show} onHide={handleClose} {...props}>
+          <Offcanvas.Header closeButton>
+          <IconUserCircle  color="blue" size={24 }/>  
+            <Offcanvas.Title> Perfil</Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo facilis maxime reprehenderit maiores! Rem aspernatur reprehenderit velit eos hic! Voluptates earum ad fuga quaerat! Incidunt eius nisi quos recusandae sequi.
+          </Offcanvas.Body>
+        </Offcanvas>
+      </>
+    );
+  }
+
+  function Example() {
+    return (
+      <>
+        {["end"].map((placement, idx) => (
+          <OffCanvasExample key={idx} placement={placement} name={placement} />
+        ))}
+      </>
+    );
+  }
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container-fluid">
@@ -36,8 +82,8 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/users">
-                Usuarios
+              <Link className="nav-link" href="/administration">
+                Administracion
               </Link>
             </li>
             <li className="nav-item dropdown">
@@ -49,7 +95,7 @@ export default function Navigation() {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Administracion
+                Aextra
               </Link>
               <div className="dropdown-menu">
                 <Link className="dropdown-item" href="#">
@@ -68,7 +114,11 @@ export default function Navigation() {
               </div>
             </li>
           </ul>
-          
+          <form className="d-flex">
+            
+              <Example />
+            
+          </form>
         </div>
       </div>
     </nav>

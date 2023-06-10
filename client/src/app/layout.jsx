@@ -6,6 +6,7 @@ import { Toaster } from "./Toaster";
 
 //import Head from "next/head";
 import { DependenciesProvider } from "@/context/DependenciesContext";
+import { AdministrationProvider } from "@/context/AdministrationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,15 +41,20 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className={inter.className}>
+        <main>
+
         <header>
           <Navigation />
         </header>
         <div className="container p-4">
-          <DependenciesProvider>
-            {children}
-            <Toaster />
-          </DependenciesProvider>
+          <AdministrationProvider>
+            <DependenciesProvider>
+              {children}
+              <Toaster />
+            </DependenciesProvider>
+          </AdministrationProvider>
         </div>
+        </main>
         <Script
           src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
           integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

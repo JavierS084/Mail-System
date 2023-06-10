@@ -50,31 +50,30 @@ function Search() {
         <hr />
         {filteredData.length !== 0 && (
           <table
-            className="table table-borderles"
+            className="table table-hover mt-2"
             style={{ display: showSearch ? "" : "none" }}
           >
-            <tr className="border-bottom">
-            <td className="px-2">
-                <b>ID</b>
-              </td>
-              <td className="px-2">
-                <b>Dependencias</b>
-              </td>
-            </tr>
-            {filteredData.slice(0, 15).map((dependency) => {
-              return (
-                <tr className="border-bottom" key={dependency.id}>
+            <thead>
+              <tr className="border-bottom">
+                <th scope="col">ID</th>
+                <th scope="col">Dependencias</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredData.slice(0, 15).map((dependency) => {
+                return (
+                  <tr scope="row" key={dependency.id}>
                     <td>{dependency.id} </td>
-                  <td>{dependency.dependencia} </td>
-                </tr>
-                
-              );
-            })}
+                    <td>{dependency.dependencia} </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </table>
         )}
         {wordEntered === "" ? (
           <div className="alert alert-success animate_animated">
-            Escriba la dependencia que busca
+            Escriba la dependencia que esta buscando...
           </div>
         ) : (
           <div

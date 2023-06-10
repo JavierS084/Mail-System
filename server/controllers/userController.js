@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize";
 import User from "../models/userModel.js";
 import argon2 from "argon2";
 
@@ -5,7 +6,7 @@ import argon2 from "argon2";
 export const getUsers = async (req, res) => {
     try {
         const response = await User.findAll({
-            attributes: ['uuid', 'id', 'name', 'email', 'role']
+            attributes: ['uuid', 'id', 'name', 'email', 'role', [Sequelize.fn('date_format', Sequelize.col('createdAt'), '%d-%m-%Y'), 'createdAt'], 'updatedAt']
         });
         res.status(200).json(response);
     } catch (error) {
@@ -60,7 +61,7 @@ export const updateUser = async (req, res) => {
         hashPassword = await argon2.hash(password);
     }
     try {
-    if (password !== confPassword) return res.status(400).json({ msg: "Password and Confirm Password do not match" });
+        if (password !== confPassword) return res.status(400).json({ msg: "Password and Confirm Password do not match" });
         await User.update({
             name: name,
             email: email,
