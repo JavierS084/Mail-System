@@ -3,19 +3,19 @@
 import { useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
-import { useAdministration } from "@/context";
+import { useAdministrations } from "@/context";
 import AdministrationForm from "@/components/AdministrationForm";
 import AdministrationCard from "@/components/AdministrationCard";
 
 function AdmPage() {
-  const { administrations, loadUsers } = useAdministration();
+  const { administrations, loadUsers } = useAdministrations();
 
   useEffect(() => {
     const timer = setTimeout(() => {
       loadUsers();
     }, 1000);
     return () => clearTimeout(timer);
-  }, [administrations]);
+  }, [administrations, Tabs]);
 
   function renderlista() {
     if (administrations.length === 0) {
@@ -48,11 +48,10 @@ function AdmPage() {
           </div>
         </Tab>
         <Tab eventKey="crearUsers" title="Crear Usuarios">
-          <AdministrationForm/>
+          <AdministrationForm />
         </Tab>
-        <Tab eventKey="roles" title="Roles">
-
-        </Tab>
+        <Tab eventKey="roles" title="Roles"></Tab>
+        <Tab eventKey="administracion" title="Administracion"></Tab>
       </Tabs>
     </div>
   );

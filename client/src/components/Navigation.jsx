@@ -3,7 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Button from "react-bootstrap/Button";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { IconHomeCog, IconUserCircle } from '@tabler/icons-react';
+import { IconHomeCog, IconUserCircle, IconLogout } from "@tabler/icons-react";
 
 export default function Navigation() {
   const options = [
@@ -22,15 +22,27 @@ export default function Navigation() {
     return (
       <>
         <Button variant="primary" onClick={toggleShow} className="me-2">
-          <IconHomeCog color="white" size={24 }  />
+          <IconHomeCog color="white" size={24} />
         </Button>
         <Offcanvas show={show} onHide={handleClose} {...props}>
           <Offcanvas.Header closeButton>
-          <IconUserCircle  color="blue" size={24 }/>  
+            <IconUserCircle color="blue" size={24} />
             <Offcanvas.Title> Perfil</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nemo facilis maxime reprehenderit maiores! Rem aspernatur reprehenderit velit eos hic! Voluptates earum ad fuga quaerat! Incidunt eius nisi quos recusandae sequi.
+            <p>User name</p>
+            <div className="d-flex align-items-end flex-column">
+              <div className="mt-auto p2">
+                <p>
+                  Salir
+                  <IconLogout
+                    className="justify-content-end pl-4"
+                    color="blue"
+                    size={24}
+                  />
+                </p>
+              </div>
+            </div>
           </Offcanvas.Body>
         </Offcanvas>
       </>
@@ -68,7 +80,7 @@ export default function Navigation() {
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
               <Link className="nav-link" href="/">
-                Home <span className="visually-hidden">(current)</span>
+                Inicio <span className="visually-hidden">(current)</span>
               </Link>
             </li>
             <li className="nav-item">
@@ -115,9 +127,7 @@ export default function Navigation() {
             </li>
           </ul>
           <form className="d-flex">
-            
-              <Example />
-            
+            <Example />
           </form>
         </div>
       </div>

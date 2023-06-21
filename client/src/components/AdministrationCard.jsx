@@ -1,10 +1,11 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useAdministration } from "@/context";
+import { useAdministrations } from "@/context";
+import { toast } from "react-hot-toast";
 function AdministrationCard({ administrations }) {
-  const { delUser, setAdministrations } = useAdministration();
+  const { delUser, setAdministrations } = useAdministrations();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
   const [show, setShow] = useState(false);
@@ -28,7 +29,7 @@ function AdministrationCard({ administrations }) {
     //console.log(value )
     if (checked) {
       setSelect([...select, value]);
-      console.log(value);
+      //console.log(value);
       setAccion(checked);
     } else {
       //pasa todos los datos menos los selecionados
@@ -49,7 +50,7 @@ function AdministrationCard({ administrations }) {
       return 0;
     });
 
-    setDependencies(datosOrdenados);
+    setAdministrations(datosOrdenados);
     setOrdenAscendente(!ordenAscendente);
   }
 
@@ -58,89 +59,87 @@ function AdministrationCard({ administrations }) {
       <div className="card-body">
         <h2 className="card-title">Lista de Usuarios</h2>
         <button
-              onClick={handleShow}
-              disabled={!accion}
-              type="button"
-              className="btn btn-danger m-1"
-            >
-              Eliminar
-            </button>
-            <button
-              type="button"
-              className="btn btn-warning m-1 px-4"
-              disabled={!accion}
-              onClick={() => router.push(`/administration/edit/${select}`)}
-            >
-              Editar
-            </button>
-            <table className="table table-hover mt-2">
-            <thead>
-              <tr>
-                <th scope="col">Accion</th>
-                <th scope="col">ID</th>
-                <th scope="col" onClick={() => Orden("id")}>
-                  Nombre Completo
-                </th>
-                <th scope="col">Correo</th>
-                <th scope="col">Tipo de Usuario</th>
-                <th scope="col">Fecha de Creacion</th>
+          onClick={handleShow}
+          disabled={!accion}
+          type="button"
+          className="btn btn-danger m-1"
+        >
+          Eliminar
+        </button>
+        <button
+          type="button"
+          className="btn btn-warning m-1 px-4"
+          disabled={!accion}
+          onClick={() => router.push(`/administration/edit/${select}`)}
+        >
+          Editar
+        </button>
+        <table className="table table-hover mt-2">
+          <thead>
+            <tr>
+              <th scope="col">Accion</th>
+              <th scope="col">ID</th>
+              <th scope="col" onClick={() => Orden("id")}>
+                Nombre Completo
+              </th>
+              <th scope="col">Correo</th>
+              <th scope="col">Tipo de Usuario</th>
+              <th scope="col">Fecha de Creacion</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {administrations.map((user) => (
+              <tr scope="row" key={user.id}>
+                <td>
+                  <input
+                    onChange={handleChange}
+                    className="form-check-input"
+                    type="checkbox"
+                    value={user.uuid}
+                    id="flexCheckDefault"
+                  />
+                </td>
+
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>{user.createdAt}</td>
               </tr>
-            </thead>
-
-            <tbody>
-              {administrations.map((user) => (
-                <tr scope="row" key={user.id}>
-                  <td>
-                    <input
-                      onChange={handleChange}
-                      className="form-check-input"
-                      type="checkbox"
-                      value={user.uuid}
-                      id="flexCheckDefault"
-                    
-                    />
-                  </td>
-
-                  <td>{user.id}</td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{user.createdAt}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Modal
-            show={show}
-            onHide={handleClose}
-            backdrop="static"
-            keyboard={false}
-          >
-            <Modal.Header closeButton>
-              <Modal.Title>Eliminar</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              Realmente deseas eliminar? Este proceso no se puede deshacer.
-            </Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={handleClose}>
-                Cancelar
-              </Button>
-              <Button
-                variant="danger"
-                onClick={() => {
-                  delUser(select);
-                  setSelect([]);
-                  toast.success("Se ha eliminado Correctamente");
-                  handleClose();
-                }}
-                type="button"
-              >
-                Entendido
-              </Button>
-            </Modal.Footer>
-          </Modal>
-
+            ))}
+          </tbody>
+        </table>
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Eliminar</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Realmente deseas eliminar? Este proceso no se puede deshacer.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                delUser(select);
+                setSelect([]);
+                toast.success("Se ha eliminado Correctamente");
+                handleClose();
+              }}
+              type="button"
+            >
+              Entendido
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

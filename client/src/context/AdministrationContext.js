@@ -5,7 +5,7 @@ import { getAllUsers, getUser, createUser, updateUser, deleteUser } from "@/api/
 
 const contextAdministration = createContext();
 // esto es un hook
-export const useAdministration = () => {
+export const useAdministrations = () => {
     const context = useContext(contextAdministration);
     if (context === undefined) {
         throw new Error("useAdministration must be used within a Provider")
@@ -16,7 +16,7 @@ export const useAdministration = () => {
 
 export const AdministrationProvider = ({ children }) => {
     const [administrations, setAdministrations] = useState([]);
-
+    const [msg, setMsg] = useState("");
     async function loadUsers() {
         const response = await getAllUsers();
         setAdministrations(response.data);
@@ -36,7 +36,11 @@ export const AdministrationProvider = ({ children }) => {
     const crUser = async (user) => {
         try {
             const response = await createUser(user);
-            console.log(response);
+            console.log(response)
+            if (response.status !== 201) {
+
+                setMsg(response.data.msg)
+            }
         } catch (error) {
             console.error(error);
 
@@ -62,7 +66,7 @@ export const AdministrationProvider = ({ children }) => {
         }
     }
     return (
-        <contextAdministration.Provider value={{ administrations, loadUsers, gtUser, crUser, upUser, delUser }}>
+        <contextAdministration.Provider value={{ administrations, loadUsers, gtUser, crUser, upUser, delUser, msg }}>
             {children}
         </contextAdministration.Provider>
     )

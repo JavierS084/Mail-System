@@ -11,8 +11,9 @@ export default function DependenciesCard({ dependencies }) {
   const { delDp, setDependencies } = useDependencies();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
-  //const [ selectedit , setSelectedit] = useState();
   const [ordenAscendente, setOrdenAscendente] = useState(true);
+  //const [ selectedit , setSelectedit] = useState();
+  
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
