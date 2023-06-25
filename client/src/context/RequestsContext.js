@@ -15,38 +15,41 @@ export const useRequests = () => {
 export const RequestsProvider = ({ children }) => {
 
     const [requests, setRequests] = useState([]);
+    const [msg, setMsg] = useState("");
 
     async function loadRequests() {
         const response = await getAllRequests();
         setRequests(response.data);
+        setMsg(response.data.msg)
 
     }
 
     const gtRequest = async (id) => {
         try {
             const response = await getRequest(id);
+            setMsg(response.data.msg)
             return response.data;
         } catch (error) {
-            console.error(error);
-
+            setMsg(error.response.data.msg);
         }
     }
 
     const crRequest = async (request) => {
         try {
             const response = await createRequest(request);
-            console.log(response);
+            setMsg(response.data.msg)
+            
         } catch (error) {
-            console.error(error);
-
+            setMsg(error.response.data.msg);
         }
     }
     const upRequest = async (id, newFields) => {
         try {
             const response = await updateRequest(id, newFields);
-            console.log(response)
+            setMsg(response.data.msg)
+            
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     }
 
@@ -54,16 +57,16 @@ export const RequestsProvider = ({ children }) => {
         try {
             const response = await deleteRequest(id);
             setRequests(requests.filter(request => request.id !== id));
-            console.log(response);
+            setMsg(response.data.msg)
+            
         } catch (error) {
-
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     }
 
 
     return (
-        <contextRequest.Provider value={{ requests, loadRequests, gtRequest, crRequest, upRequest, delRequest }} >
+        <contextRequest.Provider value={{ msg, requests, loadRequests, gtRequest, crRequest, upRequest, delRequest }} >
             {children}
         </contextRequest.Provider>
     )

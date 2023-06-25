@@ -17,41 +17,41 @@ export const useAdministrations = () => {
 export const AdministrationProvider = ({ children }) => {
     const [administrations, setAdministrations] = useState([]);
     const [msg, setMsg] = useState("");
+
     async function loadUsers() {
+
         const response = await getAllUsers();
         setAdministrations(response.data);
+        setMsg(response.data.msg)
 
     }
 
     const gtUser = async (id) => {
         try {
             const response = await getUser(id);
+            setMsg(response.data.msg)
             return response.data;
         } catch (error) {
-            console.error(error);
-
+            setMsg(error.response.data.msg);
         }
     }
 
     const crUser = async (user) => {
         try {
             const response = await createUser(user);
-            console.log(response)
-            if (response.status !== 201) {
+            setMsg(response.data.msg)
 
-                setMsg(response.data.msg)
-            }
         } catch (error) {
-            console.error(error);
-
+            setMsg(error.response.data.msg);
         }
     }
     const upUser = async (id, newFields) => {
         try {
             const response = await updateUser(id, newFields);
-            console.log(response)
+            setMsg(response.data.msg)
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
+
         }
     }
 
@@ -59,10 +59,11 @@ export const AdministrationProvider = ({ children }) => {
         try {
             const response = await deleteUser(id);
             setAdministrations(administrations.filter(user => user.id !== id));
-            console.log(response);
-        } catch (error) {
+            setMsg(response.data.msg)
 
-            console.error(error);
+        } catch (error) {
+            setMsg(error.response.data.msg);
+
         }
     }
     return (

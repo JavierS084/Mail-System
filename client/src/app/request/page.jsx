@@ -4,10 +4,10 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import RequestForm from "@/components/RequestForm";
 import RequestCard from "@/components/RequestCard";
-import { useRequests } from "@/context";
+import { useRequests } from "@/context/RequestsContext";
 
 function Request() {
-  const { requests, loadRequests } = useRequests();
+  const { requests, loadRequests, msg } = useRequests();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -15,7 +15,7 @@ function Request() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [requests]);
+  }, [msg]);
 
   function renderlista() {
     if (requests.length === 0) {

@@ -15,18 +15,21 @@ export const useMailTypes = () => {
 
 export const MailTypeProvider = ({ children }) => {
     const [MailTypes, setMailTypes] = useState([]);
-    //View List
+    const [msg, setMsg] = useState("");
+
     async function loadTypes() {
         const response = await getAllTypes();
         setMailTypes(response.data);
+        setMsg(response.data.msg)
     }
 
     const getType = async (id) => {
         try {
             const response = await getmailType(id);
+            setMsg(response.data.msg)
             return response.data 
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
         
     }
@@ -34,19 +37,19 @@ export const MailTypeProvider = ({ children }) => {
     const crType = async (type) => {
         try {
             const response = await createType(type);
-            console.log(response);
+            setMsg(response.data.msg)
             
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     }
     
     const upType = async (id, newFields) => {
         try {
             const response = await updateType(id, newFields);
-            console.log(response);
+            setMsg(response.data.msg)
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
             
         }
         
@@ -55,9 +58,9 @@ export const MailTypeProvider = ({ children }) => {
         try {
             const response = await deleteType(id);
             setMailTypes(MailTypes.filter(type => type.id !== id));
-            console.log(response);
+            setMsg(response.data.msg)
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     };
 
@@ -65,7 +68,7 @@ export const MailTypeProvider = ({ children }) => {
 
 
     return (
-        <MailTypeContext.Provider value={{ MailTypes, loadTypes, delType, crType, getType, upType }} >
+        <MailTypeContext.Provider value={{ MailTypes, loadTypes, delType, crType, getType, upType, msg }} >
             {children}
         </MailTypeContext.Provider>
     )

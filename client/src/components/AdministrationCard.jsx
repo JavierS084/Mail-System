@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { useAdministrations } from "@/context";
 import { toast } from "react-hot-toast";
+import { useAdministrations } from "@/context/AdministrationContext";
+
 function AdministrationCard({ administrations }) {
   const { delUser, setAdministrations } = useAdministrations();
   const [accion, setAccion] = useState(false);

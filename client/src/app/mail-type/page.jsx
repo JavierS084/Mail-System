@@ -4,10 +4,10 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import MailTypesForm from "@/components/MailTypesForm";
 import MailTypesCard from "@/components/MailTypesCard";
-import { useMailTypes } from "@/context";
+import { useMailTypes } from "@/context/MailTypeContext";
 
 function MailTypesPage() {
-  const { MailTypes, loadTypes } = useMailTypes();
+  const { MailTypes, loadTypes, msg } = useMailTypes();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -15,7 +15,7 @@ function MailTypesPage() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [MailTypes]);
+  }, [msg]);
 
   function renderlista() {
     if (MailTypes.length === 0) {

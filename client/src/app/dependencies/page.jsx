@@ -8,7 +8,7 @@ import { useDependencies } from "@/context/DependenciesContext";
 import DependenciesSearch from "@/components/DependenciesSearch";
 
 export default function DependenciasPage() {
-  const { dependencies, loadDependencies } = useDependencies();
+  const { dependencies, loadDependencies, msg } = useDependencies();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -16,7 +16,7 @@ export default function DependenciasPage() {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, [dependencies]);
+  }, [msg]);
 
   function renderlista() {
     if (dependencies.length === 0) {
@@ -31,7 +31,7 @@ export default function DependenciasPage() {
       return <DependenciesCard dependencies={dependencies} />;
     }
   }
-  //https://react-bootstrap.github.io/components/tabs/ para mejorar el tab
+
   return (
     <div>
       <Tabs
