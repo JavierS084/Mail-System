@@ -5,7 +5,7 @@ import Tabs from "react-bootstrap/Tabs";
 import DependenciesCard from "@/components/DependenciesCard";
 import DependenciesForm from "@/components/DependenciesForm";
 import { useDependencies } from "@/context/DependenciesContext";
-import Search from "@/components/Search";
+import DependenciesSearch from "@/components/DependenciesSearch";
 
 export default function DependenciasPage() {
   const { dependencies, loadDependencies } = useDependencies();
@@ -23,7 +23,7 @@ export default function DependenciasPage() {
       return (
         <div className="card">
           <div className="card-body">
-            <h1 className="card-title">No hay dependencias disponibles</h1>
+            <h1 className="card-title">No existe dependencias disponibles</h1>
           </div>
         </div>
       );
@@ -63,7 +63,7 @@ export default function DependenciasPage() {
             id="searchdependencias"
             role="tabpanel"
           >
-            {<Search />}
+            {<DependenciesSearch />}
           </div>
         </Tab>
       </Tabs>

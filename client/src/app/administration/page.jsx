@@ -15,7 +15,7 @@ function AdmPage() {
       loadUsers();
     }, 1000);
     return () => clearTimeout(timer);
-  }, [administrations, Tabs]);
+  }, [administrations]);
 
   function renderlista() {
     if (administrations.length === 0) {

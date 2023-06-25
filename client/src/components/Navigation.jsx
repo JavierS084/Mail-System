@@ -84,7 +84,7 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/mails">
+              <Link className="nav-link" href="/mail">
                 Correos
               </Link>
             </li>
@@ -94,10 +94,11 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/administration">
-                Administracion
+              <Link className="nav-link" href="/group">
+                Grupos
               </Link>
             </li>
+            
             <li className="nav-item dropdown">
               <Link
                 className="nav-link dropdown-toggle"
@@ -107,14 +108,14 @@ export default function Navigation() {
                 aria-haspopup="true"
                 aria-expanded="false"
               >
-                Aextra
+                Otros
               </Link>
               <div className="dropdown-menu">
-                <Link className="dropdown-item" href="#">
-                  Action
+                <Link className="dropdown-item" href="/request">
+                  Solicitudes
                 </Link>
-                <Link className="dropdown-item" href="#">
-                  Another action
+                <Link className="dropdown-item" href="/mail-type">
+                  Tipo de Correo
                 </Link>
                 <Link className="dropdown-item" href="#">
                   Something else here
@@ -124,6 +125,11 @@ export default function Navigation() {
                   Separated link
                 </Link>
               </div>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" href="/administration">
+                Administracion
+              </Link>
             </li>
           </ul>
           <form className="d-flex">

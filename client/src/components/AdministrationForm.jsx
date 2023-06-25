@@ -156,7 +156,7 @@ function AdministrationForm() {
                     </small>
                   </div>
                   <div className="form-group">
-                    <label for="exampleInputEmail1" className="form-label mt-4">
+                    <label htmlFor="exampleInputEmail1" className="form-label mt-4">
                       Dirección de correo electrónico
                     </label>
                     <input
@@ -180,7 +180,7 @@ function AdministrationForm() {
                   </div>
                   <div className="form-group">
                     <label
-                      for="exampleInputPassword1"
+                      htmlFor="exampleInputPassword1"
                       className="form-label mt-4"
                     >
                       Contraseña
@@ -203,7 +203,7 @@ function AdministrationForm() {
                   </div>
                   <div className="form-group">
                     <label
-                      for="exampleInputPassword2"
+                      htmlFor="exampleInputPassword2"
                       className="form-label mt-4"
                     >
                       Confirmacion de Contraseña
