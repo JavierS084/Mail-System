@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
-import { getAllMails, getMailUser, getMail, createMail, updateMail, deleteMail } from "../api/mailApi";
+"use client"
+import { useContext, createContext, useState } from "react";
+import { getAllMails, getMailUser, getMail, createMail, updateMail, deleteMail } from "../api/mailsApi";
 
-import { MailContext } from "../context/MailContext";
+const contextMail = createContext();
 
 
 export const useMails = () => {
-    const context = useContext(MailContext);
+    const context = useContext(contextMail);
     if (context === undefined) {
         throw new Error("El Context is undefined");
     }
@@ -84,9 +85,9 @@ export const MailProvider = ({ children }) => {
 
 
     return (
-        <MailContext.Provider value={{ gp, mails, msg, loadMails, loadMailUser, gtMail, crMail, upMail, delMail }} >
+        <contextMail.Provider value={{ gp, mails, msg, loadMails, loadMailUser, gtMail, crMail, upMail, delMail }} >
             {children}
-        </MailContext.Provider>
+        </contextMail.Provider>
     )
 }
 

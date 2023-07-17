@@ -84,7 +84,7 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/mail">
+              <Link className="nav-link" href="/mails">
                 Correos
               </Link>
             </li>

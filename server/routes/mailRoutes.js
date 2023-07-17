@@ -3,12 +3,12 @@ import { getAllMails, getMail, createMail, updateMail, deleteMail, getMailUser }
 import { verifyUser } from "../middlewares/authUser.js";
 const router = Router();
 
-router.get('/mails', verifyUser, getAllMails);
-router.get('/mailUser', verifyUser, getMailUser);
-router.get('/mail/:id', verifyUser, getMail);
-router.post('/mail/create', verifyUser, createMail);
-router.put('/mail/update/:id', verifyUser, updateMail);
-router.delete('/mail/delete/:id', verifyUser, deleteMail);
+router.get('/mails',  getAllMails);
+router.get('/mailUser',  getMailUser);
+router.get('/mail/:id',  getMail);
+router.post('/mail/create',  createMail);
+router.put('/mail/update/:id',  updateMail);
+router.delete('/mail/delete/:id',  deleteMail);
 
 
 export default router;

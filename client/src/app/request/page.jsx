@@ -23,6 +23,7 @@ function Request() {
         <div className="card">
           <div className="card-body">
             <h1 className="card-title">No existe solicitudes disponibles</h1>
+            
           </div>
         </div>
       );

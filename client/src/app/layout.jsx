@@ -10,6 +10,7 @@ import { AdministrationProvider } from "@/context/AdministrationContext";
 import { DependenciesProvider } from "@/context/DependenciesContext";
 import { RequestsProvider } from "@/context/RequestsContext";
 import { MailTypeProvider } from "@/context/MailTypeContext";
+import { MailProvider } from "@/context/MailsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,20 +36,19 @@ export default function RootLayout({ children }) {
           </header>
           <div className="container p-4">
             <AdministrationProvider>
-              <DependenciesProvider>
-                <RequestsProvider>
-                  <MailTypeProvider>
-                    {children}
-                    <Toaster />
-                  </MailTypeProvider>
-                </RequestsProvider>
-              </DependenciesProvider>
+              <MailProvider>
+                <MailTypeProvider>
+                  <DependenciesProvider>
+                    <RequestsProvider>{children}</RequestsProvider>
+                  </DependenciesProvider>
+                </MailTypeProvider>
+              </MailProvider>
             </AdministrationProvider>
           </div>
         </main>
 
         <Script
-          rel="preload" 
+          rel="preload"
           as="script"
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
           integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
