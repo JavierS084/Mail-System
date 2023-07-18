@@ -2,24 +2,31 @@
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Formik, Form } from "formik";
-
 import Select from "react-select";
 import { useRouter, useParams } from "next/navigation";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useMails } from "@/context/MailsContext";
 import { useRequests } from "@/context/RequestsContext";
 import { useMailTypes } from "@/context/MailTypeContext";
+import { useGroups } from "@/context/GroupsContext";
+import { useDependencies } from "@/context/DependenciesContext";
 
 function MailForm() {
+  const { mails, crMail, upMail, gtMail, msg } = useMails();
+
   const { requests, loadRequests } = useRequests();
   const { mailTypes, loadTypes } = useMailTypes();
-  const { mails, crMail, upMail, gtMail, msg } = useMails();
+  const { groups, loadGroups } = useGroups();
+  const { dependencies, loadDependcies } = useDependencies();
   //section Options de Select search
   const [typeRequestList, setTypeRequestsList] = useState([]);
   const [requestOption, setRequestOption] = useState();
 
   const [mailTypesList, setTypeList] = useState([]);
   const [typeOption, setTypeOption] = useState();
+
+  const [groupList, setGroupList] = useState([]);
+  const [groupOption, setGroupOption] = useState();
 
   const params = useParams();
   const router = useRouter();
@@ -57,26 +64,32 @@ function MailForm() {
   }, []);
 
   useEffect(() => {
-    loadRequests();
-    loadTypes();
-
     const timer = setTimeout(() => {
-
       const requestOptionList = requests.map((typeSolicitud) => ({
         value: typeSolicitud.id,
         label: typeSolicitud.solicitud,
       }));
       setTypeRequestsList(requestOptionList);
-  
+
       const mailTypeOptionsList = mailTypes.map((type) => ({
         value: type.id,
         label: type.tipo,
       }));
       setTypeList(mailTypeOptionsList);
-      
+
+      const groupOptionsList = groups.map((grupo) => ({
+        value: grupo.id,
+        label: grupo.description,
+      }));
+      setGroupList(groupOptionsList);
     }, 100);
+
+    loadRequests();
+    loadTypes();
+    loadGroups();
+
     return () => clearTimeout(timer);
-  }, [requests.length]);
+  }, [requests.length, loadGroups.length]);
 
   const clearInput = () => {
     setMail([]);
@@ -223,7 +236,7 @@ function MailForm() {
                       Tipo de correo
                     </label>
                     <Select
-                      id='mailTypeId'
+                      id="mailTypeId"
                       options={mailTypesList}
                       value={typeOption}
                       onChange={setTypeOption}
@@ -247,8 +260,46 @@ function MailForm() {
                       isSearchable
                     />
                   </div>
-
-                  
+                  <div className="form-group">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label mt-4"
+                    >
+                      Grupo
+                    </label>
+                    <Select
+                      options={groupList}
+                      value={groupOption}
+                      onChange={setGroupOption}
+                      placeholder="Seleccione una opción..."
+                      isSearchable
+                    />
+                  </div>
+                  <div className="form-group flex-column d-flex">
+                    <label className="form-label mt-4">
+                      Fecha de Vinculacion
+                      <input
+                        className="form-control"
+                        type="date"
+                        onBlur={handleBlur}
+                        name="dateInicialG"
+                        onChange={handleChange}
+                        value={values.dateInicial}
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group flex-column d-flex">
+                    <label className="form-label mt-4">
+                      Fecha de Desvinculacion
+                      <input
+                        className="form-control"
+                        type="date"
+                        name="dateFinalG"
+                        onChange={handleChange}
+                        value={values.dateFinal}
+                      />
+                    </label>
+                  </div>
                 </fieldset>
 
                 <div className="mt-4">
