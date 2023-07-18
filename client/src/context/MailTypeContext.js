@@ -1,5 +1,5 @@
 "use client"
-import{ createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { getAllTypes, deleteType, createType, getmailType, updateType } from '@/api/typesApi';
 
 
@@ -14,7 +14,7 @@ export const useMailTypes = () => {
 };
 
 export const MailTypeProvider = ({ children }) => {
-    const [MailTypes, setMailTypes] = useState([]);
+    const [mailTypes, setMailTypes] = useState([]);
     const [msg, setMsg] = useState("");
 
     async function loadTypes() {
@@ -27,32 +27,32 @@ export const MailTypeProvider = ({ children }) => {
         try {
             const response = await getmailType(id);
             setMsg(response.data.msg)
-            return response.data 
+            return response.data
         } catch (error) {
             setMsg(error.response.data.msg);
         }
-        
+
     }
-    
+
     const crType = async (type) => {
         try {
             const response = await createType(type);
             setMsg(response.data.msg)
-            
+
         } catch (error) {
             setMsg(error.response.data.msg);
         }
     }
-    
+
     const upType = async (id, newFields) => {
         try {
             const response = await updateType(id, newFields);
             setMsg(response.data.msg)
         } catch (error) {
             setMsg(error.response.data.msg);
-            
+
         }
-        
+
     }
     const delType = async (id) => {
         try {
@@ -68,7 +68,7 @@ export const MailTypeProvider = ({ children }) => {
 
 
     return (
-        <MailTypeContext.Provider value={{ MailTypes, loadTypes, delType, crType, getType, upType, msg }} >
+        <MailTypeContext.Provider value={{ mailTypes, loadTypes, delType, crType, getType, upType, msg }} >
             {children}
         </MailTypeContext.Provider>
     )

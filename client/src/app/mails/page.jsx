@@ -16,7 +16,7 @@ function Mail() {
 
     return () => clearTimeout(timer);
   }, [msg]);
-  console.table(mails.length)
+
 
   function renderlista() {
     if (!mails.length) {
@@ -36,7 +36,7 @@ function Mail() {
   return (
     <div>
       <Tabs
-        defaultActiveKey="listMail"
+        defaultActiveKey="addmail"
         id="uncontrolled-tab-example"
         className="mb-3"
       >

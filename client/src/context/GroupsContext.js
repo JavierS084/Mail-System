@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
-import { getAllGroups, getGroup, createGroup, updateGroup, deleteGroup } from "../api/groupApi";
-import { GroupContext } from "../context/GroupContext";
 
+"use client"
+import React, { useContext, useState, createContext } from "react";
+import { getAllGroups, getGroup, createGroup, updateGroup, deleteGroup } from "@/api/groupsApi";
+
+const contextGroup = createContext();
 
 export const useGroups = () => {
-    const context = useContext(GroupContext);
+    const context = useContext(contextGroup);
     if (context === undefined) {
         throw new Error("El Context is undefined");
     }
@@ -14,19 +16,22 @@ export const useGroups = () => {
 export const GroupProvider = ({ children }) => {
 
     const [groups, setGroups] = useState([]);
+    const [msg, setMsg] = useState("");
 
     async function loadGroups() {
         const response = await getAllGroups();
         setGroups(response.data);
+        setMsg(response.data.msg)
 
     }
 
     const gtGroup = async (id) => {
         try {
             const response = await getGroup(id);
+            setMsg(response.data.msg)
             return response.data;
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
 
         }
     }
@@ -34,8 +39,9 @@ export const GroupProvider = ({ children }) => {
     const crGroup = async (group) => {
         try {
             const response = await createGroup(group);
-            console.log(response);
+            setMsg(response.data.msg)
         } catch (error) {
+            setMsg(error.response.data.msg);
             console.error(error);
 
         }
@@ -43,9 +49,9 @@ export const GroupProvider = ({ children }) => {
     const upGroup = async (id, newFields) => {
         try {
             const response = await updateGroup(id, newFields);
-            console.log(response)
+            setMsg(response.data.msg)
         } catch (error) {
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     }
 
@@ -53,18 +59,17 @@ export const GroupProvider = ({ children }) => {
         try {
             const response = await deleteGroup(id);
             setGroups(groups.filter(group => group.id !== id));
-            console.log(response);
+            setMsg(response.data.msg)
         } catch (error) {
-
-            console.error(error);
+            setMsg(error.response.data.msg);
         }
     }
 
 
     return (
-        <GroupContext.Provider value={{ groups, loadGroups, gtGroup, crGroup, upGroup, delGroup }} >
+        <contextGroup.Provider value={{ msg, groups, loadGroups, gtGroup, crGroup, upGroup, delGroup }} >
             {children}
-        </GroupContext.Provider>
+        </contextGroup.Provider>
     )
 }
 

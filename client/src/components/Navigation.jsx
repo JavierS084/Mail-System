@@ -94,7 +94,7 @@ export default function Navigation() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" href="/group">
+              <Link className="nav-link" href="/groups">
                 Grupos
               </Link>
             </li>

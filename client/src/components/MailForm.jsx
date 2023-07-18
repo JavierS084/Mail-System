@@ -1,19 +1,29 @@
 "use client";
-import axios from 'axios';
 import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import { Formik, Form } from "formik";
-import FormSelect from "react-bootstrap/Form";
+
+import Select from "react-select";
 import { useRouter, useParams } from "next/navigation";
-import { useMails } from "@/context/MailsContext";
 import { IconArrowLeft } from "@tabler/icons-react";
+import { useMails } from "@/context/MailsContext";
+import { useRequests } from "@/context/RequestsContext";
+import { useMailTypes } from "@/context/MailTypeContext";
 
 function MailForm() {
+  const { requests, loadRequests } = useRequests();
+  const { mailTypes, loadTypes } = useMailTypes();
   const { mails, crMail, upMail, gtMail, msg } = useMails();
+  //section Options de Select search
+  const [typeRequestList, setTypeRequestsList] = useState([]);
+  const [requestOption, setRequestOption] = useState();
+
+  const [mailTypesList, setTypeList] = useState([]);
+  const [typeOption, setTypeOption] = useState();
+
   const params = useParams();
   const router = useRouter();
-  const [data, setData] = useState([]);
-  const [query, setQuery] = useState('');
+
   const [mail, setMail] = useState({
     user: "",
     solicitante: "Talento Humano",
@@ -25,6 +35,7 @@ function MailForm() {
     departamentId: "",
     groupId: "",
   });
+
   useEffect(() => {
     const loadmail = async () => {
       if (params && params.uuid) {
@@ -46,17 +57,26 @@ function MailForm() {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3030/requests")
-      .then((response) => {
-        setData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  });
-  const filteredData = data.filter((item) =>
-    item.solicitud.toLowerCase().includes(query.toLowerCase())
-  );
+    loadRequests();
+    loadTypes();
+
+    const timer = setTimeout(() => {
+
+      const requestOptionList = requests.map((typeSolicitud) => ({
+        value: typeSolicitud.id,
+        label: typeSolicitud.solicitud,
+      }));
+      setTypeRequestsList(requestOptionList);
+  
+      const mailTypeOptionsList = mailTypes.map((type) => ({
+        value: type.id,
+        label: type.tipo,
+      }));
+      setTypeList(mailTypeOptionsList);
+      
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [requests.length]);
 
   const clearInput = () => {
     setMail([]);
@@ -119,7 +139,7 @@ function MailForm() {
             );
             router.push("/mail");
           } else {
-            await crMail(values);
+            await crMail(values, typeOption, requestOption);
             toast.success(
               "El usuario " + values.name + " se ha guardado correctamente"
             );
@@ -176,16 +196,15 @@ function MailForm() {
                 <fieldset>
                   <div className="form-group">
                     <label className="form-label mt-4" id="readOnlyInput">
-                      Usuario
+                      Correo de usuario
                     </label>
                     <input
                       className="form-control"
                       type="text"
                       placeholder="Inserte aqui el usuario..."
-                      data-listener-added_8ef6daa8="true"
-                      name="name"
+                      name="user"
                       onChange={handleChange}
-                      value={values.name}
+                      value={values.user}
                       onBlur={handleBlur}
                     />
                     <small className="form-text text-danger">
@@ -203,80 +222,33 @@ function MailForm() {
                     >
                       Tipo de correo
                     </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="exampleInputEmail1"
-                      aria-describedby="emailHelp"
-                      placeholder="Ingrese su correo"
-                      name="email"
-                      onChange={handleChange}
-                      value={values.email}
-                      onBlur={handleBlur}
+                    <Select
+                      id='mailTypeId'
+                      options={mailTypesList}
+                      value={typeOption}
+                      onChange={setTypeOption}
+                      placeholder="Seleccione una opción..."
+                      isSearchable
                     />
-                    <small id="emailHelp" className="form-text text-danger">
-                      {touched.email && errors.email && (
-                        <span>
-                          <b>{errors.email}</b>
-                        </span>
-                      )}
-                    </small>
                   </div>
+
                   <div className="form-group">
                     <label
                       htmlFor="exampleInputPassword1"
                       className="form-label mt-4"
                     >
-                      Contraseña
+                      Tipo de Solicitud
                     </label>
-                    <input
-                      type="password"
-                      className="form-control"
-                      id="exampleInputPassword1"
-                      placeholder="Password"
-                      name="password"
-                      onChange={handleChange}
-                      value={values.password}
-                      onBlur={handleBlur}
+                    <Select
+                      options={typeRequestList}
+                      value={requestOption}
+                      onChange={setRequestOption}
+                      placeholder="Seleccione una opción..."
+                      isSearchable
                     />
-                    <small className="form-text text-danger">
-                      {touched.password && errors.password && (
-                        <span>{errors.password}</span>
-                      )}
-                    </small>
                   </div>
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      placeholder="Tipo"
-                      value={query}
-                      onChange={(event) => setQuery(event.target.value)}
-                    />
-                    <select>
-                      {filteredData.map((item) => (
-                        <option key={item.id} value={item.solicitud}>
-                          {item.solicitud}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </fieldset>
-                <fieldset className="form-group">
-                  <legend className="mt-4">Tipo de Usuario</legend>
 
-                  <FormSelect.Select
-                    name="role"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.role}
-                  >
-                    <option disabled value="">
-                      Seleccione
-                    </option>
-
-                    <option value="user">Usuario estandar</option>
-                    <option value="admin">Administrador</option>
-                  </FormSelect.Select>
+                  
                 </fieldset>
 
                 <div className="mt-4">

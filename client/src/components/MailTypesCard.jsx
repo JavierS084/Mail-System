@@ -7,7 +7,7 @@ import { toast } from "react-hot-toast";
 
 import { useMailTypes } from "@/context/MailTypeContext";
 
-export default function MailTypesCard({ MailTypes }) {
+export default function MailTypesCard({ mailTypes }) {
   const { delType, setMailtypes } = useMailTypes();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
@@ -96,7 +96,7 @@ export default function MailTypesCard({ MailTypes }) {
             </thead>
 
             <tbody>
-              {MailTypes.map((type) => (
+              {mailTypes.map((type) => (
                 <tr scope="row" key={type.id}>
                   <td>
                     <input

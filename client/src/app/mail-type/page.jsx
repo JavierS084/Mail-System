@@ -7,7 +7,7 @@ import MailTypesCard from "@/components/MailTypesCard";
 import { useMailTypes } from "@/context/MailTypeContext";
 
 function MailTypesPage() {
-  const { MailTypes, loadTypes, msg } = useMailTypes();
+  const { mailTypes, loadTypes, msg } = useMailTypes();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,7 +18,7 @@ function MailTypesPage() {
   }, [msg]);
 
   function renderlista() {
-    if (MailTypes.length === 0) {
+    if (mailTypes.length === 0) {
       return (
         <div className="card">
           <div className="card-body">
@@ -27,7 +27,7 @@ function MailTypesPage() {
         </div>
       );
     } else {
-      return <MailTypesCard MailTypes={MailTypes} />;
+      return <MailTypesCard mailTypes={mailTypes} />;
     }
   }
 

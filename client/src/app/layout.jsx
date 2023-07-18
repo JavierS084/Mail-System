@@ -11,6 +11,7 @@ import { DependenciesProvider } from "@/context/DependenciesContext";
 import { RequestsProvider } from "@/context/RequestsContext";
 import { MailTypeProvider } from "@/context/MailTypeContext";
 import { MailProvider } from "@/context/MailsContext";
+import GroupProvider from "@/context/GroupsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,9 @@ export default function RootLayout({ children }) {
               <MailProvider>
                 <MailTypeProvider>
                   <DependenciesProvider>
-                    <RequestsProvider>{children}</RequestsProvider>
+                    <RequestsProvider>
+                      <GroupProvider>{children}</GroupProvider>
+                    </RequestsProvider>
                   </DependenciesProvider>
                 </MailTypeProvider>
               </MailProvider>

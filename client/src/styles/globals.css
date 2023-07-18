@@ -10,11 +10,11 @@ h1 {
   font-size: 1.75rem;
 }
 
-.error{
+.error {
   color: red;
   font-size: 18px;
 }
 
-
-
-
+#fechared {
+  color: rgb(202, 44, 44);
+}
