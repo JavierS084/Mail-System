@@ -116,7 +116,7 @@ export const getMail = async (req, res) => {
                 'mailTypeId',
                 'requestId',
                 'groupId',
-                'departamentId',
+                'dependencyId',
                 [Sequelize.fn('date_format', Sequelize.col('dateInicial'), '%Y-%m-%d'), 'dateInicial'],
                 [Sequelize.fn('date_format', Sequelize.col('dateFinal'), '%Y-%m-%d'), 'dateFinal'],
                 [Sequelize.fn('date_format', Sequelize.col('dateSolicitud'), '%Y-%m-%d'), 'dateSolicitud'],
@@ -129,7 +129,7 @@ export const getMail = async (req, res) => {
                 attributes: ['tipo'],
 
                 model: Dependency,
-                attributes: ['departamento'],
+                attributes: ['dependencia'],
 
                 model: Request,
                 attributes: ['solicitante'],
@@ -149,7 +149,7 @@ export const getMail = async (req, res) => {
 
 export const createMail = async (req, res) => {
     try {
-        const { user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, departamentId, groupId } = req.body;
+        const { user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, dependencyId, groupId } = req.body;
 
         if (dateFinal && groupId) {
             await Mail.create({
@@ -160,7 +160,7 @@ export const createMail = async (req, res) => {
                 dateFinal: dateFinal,
                 mailTypeId: mailTypeId,
                 requestId: requestId,
-                departamentId: departamentId,
+                dependencyId: dependencyId,
                 groupId: groupId
             });
             res.status(201).json({ msg: "Mail Created Successfuly" });
@@ -173,7 +173,7 @@ export const createMail = async (req, res) => {
                 dateInicial: dateInicial,
                 mailTypeId: mailTypeId,
                 requestId: requestId,
-                departamentId: departamentId,
+                dependencyId: dependencyId,
             });
             res.status(201).json({ msg: "Mail Created Successfuly" });
         } else if (!groupId && dateFinal) {
@@ -185,7 +185,7 @@ export const createMail = async (req, res) => {
                 dateFinal: dateFinal,
                 mailTypeId: mailTypeId,
                 requestId: requestId,
-                departamentId: departamentId,
+                dependencyId: dependencyId,
 
             });
             res.status(201).json({ msg: "Mail Created Successfuly" });
@@ -197,7 +197,7 @@ export const createMail = async (req, res) => {
                 dateInicial: dateInicial,
                 mailTypeId: mailTypeId,
                 requestId: requestId,
-                departamentId: departamentId,
+                dependencyId: dependencyId,
                 groupId: groupId
             });
             res.status(201).json({ msg: "Mail Created Successfuly" });
@@ -217,31 +217,31 @@ export const updateMail = async (req, res) => {
             }
         });
         if (!mail) return res.status(404).json({ msg: "Data not found" });
-        const { user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, departamentId, groupId } = req.body;
+        const { user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, dependencyId, groupId } = req.body;
         if (dateFinal && groupId) {
 
-            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, departamentId, groupId }, {
+            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, dependencyId, groupId }, {
                 where: {
                     id: mail.id
                 }
             });
             res.status(200).json({ msg: "Mail updated successfuly" });
         } else if (!dateFinal && !groupId) {
-            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, mailTypeId, requestId, departamentId }, {
+            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, mailTypeId, requestId, dependencyId }, {
                 where: {
                     id: mail.id
                 }
             });
             res.status(200).json({ msg: "Mail updated successfuly" });
         } else if (!groupId && dateFinal) {
-            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, departamentId }, {
+            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, dateFinal, mailTypeId, requestId, dependencyId }, {
                 where: {
                     id: mail.id
                 }
             });
             res.status(200).json({ msg: "Mail updated successfuly" });
         } else if (!dateFinal && groupId) {
-            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, mailTypeId, requestId, departamentId, groupId }, {
+            await Mail.update({ user, solicitante, dateSolicitud, dateInicial, mailTypeId, requestId, dependencyId, groupId }, {
                 where: {
                     id: mail.id
                 }

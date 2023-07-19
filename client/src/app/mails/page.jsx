@@ -29,7 +29,7 @@ function Mail() {
         </div>
       );
     } else {
-      return //<MailCard mails={mails} />;
+      return <MailCard mails={mails} />;
     }
   }
 //

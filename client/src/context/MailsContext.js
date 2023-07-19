@@ -52,8 +52,8 @@ export const MailProvider = ({ children }) => {
                 setGp(false);
             }
         } catch (error) {
+            console.error(error);
             setMsg(error.response.data.msg);
-            
         }
     }
     const upMail = async (id, newFields) => {

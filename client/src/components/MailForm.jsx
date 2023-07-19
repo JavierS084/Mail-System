@@ -20,21 +20,22 @@ function MailForm() {
   const { dependencies, loadDependencies } = useDependencies();
   //section Options de Select search
   const [typeRequestList, setTypeRequestsList] = useState([]);
-  const [requestOption, setRequestOption] = useState();
+  const [requestOption, setRequestOption] = useState({ requestId: "" });
 
   const [mailTypesList, setTypeList] = useState([]);
-  const [typeOption, setTypeOption] = useState();
+  const [typeOption, setTypeOption] = useState({ mailTypeId: "" });
 
   const [groupList, setGroupList] = useState([]);
-  const [groupOption, setGroupOption] = useState();
+  const [groupOption, setGroupOption] = useState({ groupId: "" });
 
   const [dependenciesList, setDependenciesList] = useState([]);
-  const [dependenciesOption, setDependenciesOption] = useState();
+  const [dependenciesOption, setDependenciesOption] = useState({
+    dependencyId: "",
+  });
 
   const params = useParams();
   const router = useRouter();
 
-  console.log(groupOption);
   const [mail, setMail] = useState({
     user: "",
     solicitante: "Talento Humano",
@@ -46,6 +47,17 @@ function MailForm() {
     dependencyId: "",
     requestId: "",
   });
+
+
+  const updateProps = () => {
+    setMail({
+      ...mail,
+      mailTypeId: typeOption.mailTypeId,
+      groupId: groupOption.groupId,
+      dependencyId: dependenciesOption.dependencyId,
+      requestId: requestOption.requestId,
+    });
+  };
 
   useEffect(() => {
     const loadmail = async () => {
@@ -70,25 +82,25 @@ function MailForm() {
   useEffect(() => {
     const timer = setTimeout(() => {
       const requestOptionList = requests.map((typeSolicitud) => ({
-        value: typeSolicitud.id,
+        requestId: typeSolicitud.id,
         label: typeSolicitud.solicitud,
       }));
       setTypeRequestsList(requestOptionList);
 
       const mailTypeOptionsList = mailTypes.map((type) => ({
-        value: type.id,
+        mailTypeId: type.id,
         label: type.tipo,
       }));
       setTypeList(mailTypeOptionsList);
 
       const groupOptionsList = groups.map((grupo) => ({
-        value: grupo.id,
+        groupId: grupo.id,
         label: grupo.description,
       }));
       setGroupList(groupOptionsList);
 
       const dependenciesOptionsList = dependencies.map((dependency) => ({
-        value: dependency.id,
+        dependencyId: dependency.id,
         label: dependency.dependencia,
       }));
       setDependenciesList(dependenciesOptionsList);
@@ -102,6 +114,10 @@ function MailForm() {
     return () => clearTimeout(timer);
   }, [requests.length, groups.length, mailTypes.length, dependencies.length]);
 
+  useEffect(() => {
+    updateProps();
+  }, [typeOption, groupOption, requestOption, dependenciesOption]);
+
   const clearInput = () => {
     setMail([]);
   };
@@ -113,7 +129,7 @@ function MailForm() {
         enableReinitialize={true}
         validate={(values) => {
           let errores = {};
-
+          /*
           if (!values.user) {
             errores.user = "Por favor ingrese el Correo";
           } else if (
@@ -130,7 +146,7 @@ function MailForm() {
               </span>
             ));
           }
-          /*
+          
 
           if (!values.dateSolicitud) {
             errores.dateSolicitud = "Por favor ingrese la Fecha de Solicitud";
@@ -164,7 +180,7 @@ function MailForm() {
             );
             router.push("/mails");
           } else {
-            await crMail(values, typeOption, requestOption);
+            await crMail(values);
             toast.success(
               "El usuario " + values.name + " se ha guardado correctamente"
             );
@@ -250,8 +266,12 @@ function MailForm() {
                     <Select
                       id="mailTypeId"
                       options={mailTypesList}
-                      value={typeOption}
-                      onChange={setTypeOption}
+                      onChange={(option) =>
+                        setTypeOption({
+                          ...typeOption,
+                          mailTypeId: option.mailTypeId,
+                        })
+                      }
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
@@ -267,8 +287,12 @@ function MailForm() {
                     <Select
                       name="requestId"
                       options={typeRequestList}
-                      value={requestOption}
-                      onChange={setRequestOption}
+                      onChange={(option) =>
+                        setRequestOption({
+                          ...requestOption,
+                          requestId: option.requestId,
+                        })
+                      }
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
@@ -283,8 +307,12 @@ function MailForm() {
                     <Select
                       name="dependecyId"
                       options={dependenciesList}
-                      value={dependenciesOption}
-                      onChange={setDependenciesOption}
+                      onChange={(option) =>
+                        setDependenciesOption({
+                          ...dependenciesOption,
+                          dependencyId: option.dependencyId,
+                        })
+                      }
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
@@ -297,11 +325,16 @@ function MailForm() {
                     >
                       Grupo
                     </label>
+
                     <Select
                       name="groupId"
                       options={groupList}
-                      value={groupOption}
-                      onChange={setGroupOption}
+                      onChange={(option) =>
+                        setGroupOption({
+                          ...groupOption,
+                          groupId: option.groupId,
+                        })
+                      }
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />

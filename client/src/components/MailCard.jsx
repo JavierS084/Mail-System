@@ -7,11 +7,16 @@ import { toast } from "react-hot-toast";
 import { useMails } from "@/context/MailsContext";
 
 export default function MailCard({ mails }) {
-  const { delMails, setMails } = useMails();
+  const { delMail, setMails } = useMails();
   const [accion, setAccion] = useState(false);
   const [select, setSelect] = useState([]);
   const [ordenAscendente, setOrdenAscendente] = useState(true);
   //const [ selectedit , setSelectedit] = useState();
+  let date = new Date();
+  let output = String(date.getDate()).padStart(2, '0') + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getFullYear();
+
+  
+
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -62,7 +67,7 @@ export default function MailCard({ mails }) {
 
   return (
     <div className="row">
-      <div className="card">
+      <div className="card ">
         <div className="card-body">
           <h2 className="card-title">Lista de Correos</h2>
           <div className="col-md-5">
@@ -83,14 +88,21 @@ export default function MailCard({ mails }) {
               Editar
             </button>
           </div>
-          <table className="table table-hover mt-2">
+          <table className="table table-hover mx-auto mt-2">
             <thead>
               <tr>
                 <th scope="col">Accion</th>
                 <th scope="col">ID</th>
                 <th scope="col" onClick={() => Orden("id")}>
-                  Tipo
+                  Correo
                 </th>
+                <th className="col">Dependencia</th>
+                <th className="col">Grupo</th>
+                <th className="col">Tipo de Correo</th>
+                <th className="col">Formato </th>
+                <th className="col">Fecha de Solicitud</th>
+                <th className="col">Fecha de Inicio</th>
+                <th className="col">Fecha de Fin</th>
               </tr>
             </thead>
 
@@ -109,7 +121,23 @@ export default function MailCard({ mails }) {
                   </td>
 
                   <td>{mail.id}</td>
-                  <td>{mail.solicitud}</td>
+                  <td>{mail.user}</td>
+                  <td>{mail.dependency.dependencia}</td>
+                  {mail.group ? (
+                    <td className="ml-2 text-center">
+                      {mail.group.description}
+                    </td>
+                  ) : (
+                    <td>Sin Grupo</td>
+                  )}
+                  <td>{mail.mailType.tipo}</td>
+                  <td>{mail.request.solicitud}</td>
+                  <td>{mail.dateSolicitud}</td>
+                  {output >= mail.dateFinal ? (
+                    <td id="fechared">{mail.dateFinal}</td>
+                  ) : (
+                    <td>{mail.dateFinal}</td> 
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -134,7 +162,7 @@ export default function MailCard({ mails }) {
               <Button
                 variant="danger"
                 onClick={() => {
-                  delMails(select);
+                  delMail(select);
                   setSelect([]);
                   toast.success("Se ha eliminado Correctamente");
                   handleClose();
