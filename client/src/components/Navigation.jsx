@@ -112,7 +112,7 @@ export default function Navigation() {
               </Link>
               <div className="dropdown-menu">
                 <Link className="dropdown-item" href="/request">
-                  Solicitudes
+                  Formato de Solicitud
                 </Link>
                 <Link className="dropdown-item" href="/mail-type">
                   Tipo de Correo

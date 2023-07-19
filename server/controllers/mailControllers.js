@@ -25,7 +25,7 @@ export const getAllMails = async (req, res) => {
                     required: true,
                 },
                 {
-                    model: Dependencie,
+                    model: Dependency,
                     attributes: ['id', 'dependencia'],
                     required: true,
                 },

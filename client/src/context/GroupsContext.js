@@ -40,6 +40,7 @@ export const GroupProvider = ({ children }) => {
         try {
             const response = await createGroup(group);
             setMsg(response.data.msg)
+            console.log(response);
         } catch (error) {
             setMsg(error.response.data.msg);
             console.error(error);
@@ -49,9 +50,11 @@ export const GroupProvider = ({ children }) => {
     const upGroup = async (id, newFields) => {
         try {
             const response = await updateGroup(id, newFields);
+            console.log(response);
             setMsg(response.data.msg)
         } catch (error) {
             setMsg(error.response.data.msg);
+            console.error(error);
         }
     }
 

@@ -17,7 +17,7 @@ function MailForm() {
   const { requests, loadRequests } = useRequests();
   const { mailTypes, loadTypes } = useMailTypes();
   const { groups, loadGroups } = useGroups();
-  const { dependencies, loadDependcies } = useDependencies();
+  const { dependencies, loadDependencies } = useDependencies();
   //section Options de Select search
   const [typeRequestList, setTypeRequestsList] = useState([]);
   const [requestOption, setRequestOption] = useState();
@@ -28,19 +28,23 @@ function MailForm() {
   const [groupList, setGroupList] = useState([]);
   const [groupOption, setGroupOption] = useState();
 
+  const [dependenciesList, setDependenciesList] = useState([]);
+  const [dependenciesOption, setDependenciesOption] = useState();
+
   const params = useParams();
   const router = useRouter();
 
+  console.log(groupOption);
   const [mail, setMail] = useState({
     user: "",
     solicitante: "Talento Humano",
     dateInicial: "",
-    dateSolicitud: "",
     dateFinal: "",
+    dateSolicitud: "",
     mailTypeId: "",
-    requestId: "",
-    departamentId: "",
     groupId: "",
+    dependencyId: "",
+    requestId: "",
   });
 
   useEffect(() => {
@@ -55,14 +59,14 @@ function MailForm() {
           dateSolicitud: mail.dateSolicitud,
           mailTypeId: mail.mailTypeId,
           requestId: mail.requestId,
-          departamentId: mail.departamentId,
+          dependencyId: mail.dependencyId,
           groupId: mail.groupId,
         });
       }
     };
     loadmail();
   }, []);
-
+  //efecto para la actualizacion y obtencion de datos para el select de los distintos componentes
   useEffect(() => {
     const timer = setTimeout(() => {
       const requestOptionList = requests.map((typeSolicitud) => ({
@@ -82,14 +86,21 @@ function MailForm() {
         label: grupo.description,
       }));
       setGroupList(groupOptionsList);
+
+      const dependenciesOptionsList = dependencies.map((dependency) => ({
+        value: dependency.id,
+        label: dependency.dependencia,
+      }));
+      setDependenciesList(dependenciesOptionsList);
     }, 100);
 
+    loadDependencies();
     loadRequests();
     loadTypes();
     loadGroups();
 
     return () => clearTimeout(timer);
-  }, [requests.length, loadGroups.length]);
+  }, [requests.length, groups.length, mailTypes.length, dependencies.length]);
 
   const clearInput = () => {
     setMail([]);
@@ -119,6 +130,7 @@ function MailForm() {
               </span>
             ));
           }
+          /*
 
           if (!values.dateSolicitud) {
             errores.dateSolicitud = "Por favor ingrese la Fecha de Solicitud";
@@ -129,8 +141,8 @@ function MailForm() {
             errores.dateInicial =
               "La Fecha de Vinculacion no puede ser anterior a la Fecha de Solicitud";
           }
-          if (!values.departamentId) {
-            errores.departamentId = "Por favor ingrese la Dependencia";
+          if (!values.dependencyId) {
+            errores.dependencyId = "Por favor ingrese la Dependencia";
           }
           if (!values.requestId) {
             errores.requestId = "Por favor ingrese el tipo de Solicitud";
@@ -141,7 +153,7 @@ function MailForm() {
           if (values.dateFinal && values.dateFinal < values.dateInicial) {
             errores.dateFinal =
               "La Fecha de Desvinculacion no puede ser anterior a la Fecha de Vinculacion";
-          }
+          }*/
           return errores;
         }}
         onSubmit={async (values, actions) => {
@@ -150,7 +162,7 @@ function MailForm() {
             toast.success(
               "El usuario " + values.name + " se ha actualizado correctamente"
             );
-            router.push("/mail");
+            router.push("/mails");
           } else {
             await crMail(values, typeOption, requestOption);
             toast.success(
@@ -165,7 +177,7 @@ function MailForm() {
             dateFinal: "",
             mailTypeId: "",
             requestId: "",
-            departamentId: "",
+            dependencyId: "",
             groupId: "",
           });
         }}
@@ -180,8 +192,8 @@ function MailForm() {
           handleBlur,
         }) => (
           <Form onSubmit={handleSubmit}>
-            <div className="row justify-content-center">
-              <div className="form-group col-md-6 p-4">
+            <div className="justify-content-center">
+              <div className="form-group p-4">
                 <div className="d-flex flex-row">
                   {params.uuid ? (
                     <div className="col-sm-1 flex-column d-flex">
@@ -200,20 +212,20 @@ function MailForm() {
                     <h2>
                       {params.uuid
                         ? "Editar Usuario"
-                        : "Crear un nuevo Usuario"}
+                        : "Registrar un nuevo correo"}
                     </h2>
                   </div>
                 </div>
                 <p className="error pl-5">{msg}</p>
 
-                <fieldset>
-                  <div className="form-group">
+                <fieldset className="row">
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4" id="readOnlyInput">
                       Correo de usuario
                     </label>
                     <input
                       className="form-control"
-                      type="text"
+                      type="email"
                       placeholder="Inserte aqui el usuario..."
                       name="user"
                       onChange={handleChange}
@@ -228,7 +240,7 @@ function MailForm() {
                       )}
                     </small>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label
                       htmlFor="exampleInputEmail1"
                       className="form-label mt-4"
@@ -245,7 +257,7 @@ function MailForm() {
                     />
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label
                       htmlFor="exampleInputPassword1"
                       className="form-label mt-4"
@@ -253,6 +265,7 @@ function MailForm() {
                       Tipo de Solicitud
                     </label>
                     <Select
+                      name="requestId"
                       options={typeRequestList}
                       value={requestOption}
                       onChange={setRequestOption}
@@ -260,7 +273,24 @@ function MailForm() {
                       isSearchable
                     />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group col-md-6 flex-column d-flex">
+                    <label
+                      htmlFor="exampleInputPassword1"
+                      className="form-label mt-4"
+                    >
+                      Dependencia Perteneciente
+                    </label>
+                    <Select
+                      name="dependecyId"
+                      options={dependenciesList}
+                      value={dependenciesOption}
+                      onChange={setDependenciesOption}
+                      placeholder="Seleccione una opción..."
+                      isSearchable
+                    />
+                  </div>
+
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label
                       htmlFor="exampleInputPassword1"
                       className="form-label mt-4"
@@ -268,6 +298,7 @@ function MailForm() {
                       Grupo
                     </label>
                     <Select
+                      name="groupId"
                       options={groupList}
                       value={groupOption}
                       onChange={setGroupOption}
@@ -275,26 +306,39 @@ function MailForm() {
                       isSearchable
                     />
                   </div>
-                  <div className="form-group flex-column d-flex">
+                  <div className="form-group col-md-6 flex-column d-flex">
+                    <label className="form-label mt-4">
+                      Fecha de Solicitud
+                      <input
+                        className="form-control"
+                        type="date"
+                        onBlur={handleBlur}
+                        name="dateSolicitud"
+                        onChange={handleChange}
+                        value={values.dateSolicitud}
+                      />
+                    </label>
+                  </div>
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
                       Fecha de Vinculacion
                       <input
                         className="form-control"
                         type="date"
                         onBlur={handleBlur}
-                        name="dateInicialG"
+                        name="dateInicial"
                         onChange={handleChange}
                         value={values.dateInicial}
                       />
                     </label>
                   </div>
-                  <div className="form-group flex-column d-flex">
+                  <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
                       Fecha de Desvinculacion
                       <input
                         className="form-control"
                         type="date"
-                        name="dateFinalG"
+                        name="dateFinal"
                         onChange={handleChange}
                         value={values.dateFinal}
                       />

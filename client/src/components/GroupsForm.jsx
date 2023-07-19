@@ -1,6 +1,8 @@
+"use client"
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { useRouter, useParams } from "next/navigation";
+import { toast } from "react-hot-toast";
 import { useGroups } from "@/context/GroupsContext";
 
 export function GroupForm() {
@@ -39,7 +41,7 @@ export function GroupForm() {
   const verGroup = () => {
     const timer = setTimeout(() => {
       router.push("/groups");
-    }, 100);
+    }, 1000);
     return () => clearTimeout(timer);
   };
 
@@ -72,10 +74,20 @@ export function GroupForm() {
         }}
         onSubmit={async (values, actions) => {
           if (params.id) {
-            console.log("Update");
             await upGroup(params.id, values);
+            toast.success(
+              "El grupo " +
+                values.description +
+                " se ha actualizado correctamente"
+            );
+            verGroup();
           } else {
             await crGroup(values);
+            toast.success(
+              "El grupo " +
+                values.description +
+                " se ha guardado correctamente"
+            );
           }
 
           setGroup({
@@ -155,6 +167,7 @@ export function GroupForm() {
                       type="submit"
                       disabled={isSubmitting}
                       onClick={clearInput}
+                      
                     >
                       {isSubmitting ? "Guardando..." : "Guardar y Continuar"}
                     </button>

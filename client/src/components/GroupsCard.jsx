@@ -92,7 +92,7 @@ export default function GroupCard({ groups }) {
                 </th>
                 <th className="col"> Detalle del Grupo</th>
                 <th className="col">Fecha de Vinculacion</th>
-                <th className="col">Fecha de Devinculacion</th>
+                <th className="col">Fecha de Desvinculacion</th>
               </tr>
             </thead>
 

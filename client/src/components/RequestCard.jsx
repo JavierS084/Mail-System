@@ -36,7 +36,7 @@ export default function RequestCard({ requests }) {
     //console.log(value )
     if (checked) {
       setSelect([...select, value]);
-      console.log(value);
+      //console.log(value);
       setAccion(checked);
     } else {
       //pasa todos los datos menos los selecionados

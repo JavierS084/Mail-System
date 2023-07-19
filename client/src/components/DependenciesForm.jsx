@@ -58,12 +58,13 @@ function DependenciesForm() {
             );
             router.push("/dependencies");
           } else {
-            await crDp(values);
+            
             toast.success(
               "La dependencia " +
                 values.dependencia +
                 " se ha guardado correctamente"
             );
+            await crDp(values);
           }
           setDependency({
             dependencia: "",
@@ -82,7 +83,7 @@ function DependenciesForm() {
           <Form onSubmit={handleSubmit}>
             <div className="row justify-content-center">
               <div className="form-group col-md-6 p-4">
-                <p className="error pl-5">{msg}</p>
+                <p className="pl-5">{msg}</p>
 
                 <h2>Crear una Nueva Dependencia</h2>
                 <fieldset>
