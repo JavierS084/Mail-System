@@ -19,6 +19,11 @@ function MailForm() {
   const { groups, loadGroups } = useGroups();
   const { dependencies, loadDependencies } = useDependencies();
   //section Options de Select search
+  const [user, setUser] = useState("");
+  const [dateSolicitud, setDateSolicitud] = useState();
+  const [dateInicial, setDateInicial] = useState();
+  const [dateFinal, setDateFinal] = useState();
+
   const [typeRequestList, setTypeRequestsList] = useState([]);
   const [requestOption, setRequestOption] = useState({ requestId: "" });
 
@@ -48,7 +53,6 @@ function MailForm() {
     requestId: "",
   });
 
-
   const updateProps = () => {
     setMail({
       ...mail,
@@ -56,6 +60,10 @@ function MailForm() {
       groupId: groupOption.groupId,
       dependencyId: dependenciesOption.dependencyId,
       requestId: requestOption.requestId,
+      user: user,
+      dateFinal: dateFinal,
+      dateSolicitud: dateSolicitud,
+      dateInicial: dateInicial,
     });
   };
 
@@ -116,11 +124,48 @@ function MailForm() {
 
   useEffect(() => {
     updateProps();
-  }, [typeOption, groupOption, requestOption, dependenciesOption]);
+  }, [
+    typeOption,
+    groupOption,
+    requestOption,
+    dependenciesOption,
+    user,
+    dateFinal,
+    dateInicial,
+    dateSolicitud,
+  ]);
 
   const clearInput = () => {
     setMail([]);
+    setDateFinal();
+    setGroupOption([]);
+    setDateInicial();
+    setDateSolicitud();
+    setUser("");
+    setRequestOption([]);
+    setTypeOption([]);
+    setDependenciesOption([]);
   };
+/*
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (!typeOption.mailTypeId) {
+      alert("Por favor seleccione una opción de Tipo de Correo");
+    } else if (!requestOption.requestId) {
+      alert("Por favor seleccione una opción de Tipo de Solicitud");
+    } else if (!dependenciesOption.dependencyId) {
+      alert("Por favor seleccione una opción de las Dependencias");
+    }
+
+    // Aquí puedes enviar el formulario
+  }*/
+
+  function handleBlur(event) {
+    const value = event.target.value;
+    if (!typeRequestList.some((option) => option.requestId === value)) {
+      alert('Por favor seleccione una opción válida');
+    }
+  }
 
   return (
     <div className="card">
@@ -129,7 +174,7 @@ function MailForm() {
         enableReinitialize={true}
         validate={(values) => {
           let errores = {};
-          /*
+
           if (!values.user) {
             errores.user = "Por favor ingrese el Correo";
           } else if (
@@ -146,8 +191,10 @@ function MailForm() {
               </span>
             ));
           }
-          
-
+          console.log(values.requestOption)
+          if (!requestOption) {
+            errores.requestOption = "Por favor ingrese el tipo de Solicitud";
+          }
           if (!values.dateSolicitud) {
             errores.dateSolicitud = "Por favor ingrese la Fecha de Solicitud";
           }
@@ -157,30 +204,22 @@ function MailForm() {
             errores.dateInicial =
               "La Fecha de Vinculacion no puede ser anterior a la Fecha de Solicitud";
           }
-          if (!values.dependencyId) {
-            errores.dependencyId = "Por favor ingrese la Dependencia";
-          }
-          if (!values.requestId) {
-            errores.requestId = "Por favor ingrese el tipo de Solicitud";
-          }
-          if (!values.mailTypeId) {
-            errores.mailTypeId = "Por favor ingrese el tipo de Correo";
-          }
+
           if (values.dateFinal && values.dateFinal < values.dateInicial) {
             errores.dateFinal =
               "La Fecha de Desvinculacion no puede ser anterior a la Fecha de Vinculacion";
-          }*/
+          }
           return errores;
         }}
         onSubmit={async (values, actions) => {
           if (params.uuid) {
-            await upMail(params.uuid, values);
             toast.success(
               "El usuario " + values.name + " se ha actualizado correctamente"
             );
             router.push("/mails");
           } else {
             await crMail(values);
+
             toast.success(
               "El usuario " + values.name + " se ha guardado correctamente"
             );
@@ -198,15 +237,7 @@ function MailForm() {
           });
         }}
       >
-        {({
-          handleChange,
-          handleSubmit,
-          values,
-          isSubmitting,
-          errors,
-          touched,
-          handleBlur,
-        }) => (
+        {({ handleChange, isSubmitting, errors, touched, handleSubmit }) => (
           <Form onSubmit={handleSubmit}>
             <div className="justify-content-center">
               <div className="form-group p-4">
@@ -237,22 +268,23 @@ function MailForm() {
                 <fieldset className="row">
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4" id="readOnlyInput">
-                      Correo de usuario
+                      Correo de usuario <span className="obligatorio">*</span>
                     </label>
                     <input
                       className="form-control"
                       type="email"
                       placeholder="Inserte aqui el usuario..."
                       name="user"
-                      onChange={handleChange}
-                      value={values.user}
+                      onChange={(option) => {
+                        setUser(option.target.value);
+                        handleChange;
+                      }}
+                      value={user}
                       onBlur={handleBlur}
                     />
                     <small className="form-text text-danger">
                       {touched.user && errors.user && (
-                        <span className="error pl-5 mx-3 ">
-                          <b>{errors.user}</b>
-                        </span>
+                        <span>{errors.user}</span>
                       )}
                     </small>
                   </div>
@@ -261,17 +293,18 @@ function MailForm() {
                       htmlFor="exampleInputEmail1"
                       className="form-label mt-4"
                     >
-                      Tipo de correo
+                      Tipo de correo <span className="obligatorio">*</span>
                     </label>
                     <Select
-                      id="mailTypeId"
+                      name="mailTypeId"
                       options={mailTypesList}
-                      onChange={(option) =>
+                      onChange={(option) => {
                         setTypeOption({
                           ...typeOption,
                           mailTypeId: option.mailTypeId,
-                        })
-                      }
+                        });
+                        handleChange;
+                      }}
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
@@ -282,20 +315,28 @@ function MailForm() {
                       htmlFor="exampleInputPassword1"
                       className="form-label mt-4"
                     >
-                      Tipo de Solicitud
+                      Tipo de Solicitud <span className="obligatorio">*</span>
                     </label>
                     <Select
                       name="requestId"
                       options={typeRequestList}
-                      onChange={(option) =>
+                      onBlur={handleBlur}
+                      onChange={(option) =>{
                         setRequestOption({
                           ...requestOption,
                           requestId: option.requestId,
                         })
+                        handleChange;
+                      }
                       }
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
+                    <small className="form-text text-danger">
+                    {touched.requestOption && errors.requestOption && (
+                        <span>{errors.requestOption}</span>
+                      )}
+                    </small>
                   </div>
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label
@@ -303,10 +344,12 @@ function MailForm() {
                       className="form-label mt-4"
                     >
                       Dependencia Perteneciente
+                      <span className="obligatorio">*</span>
                     </label>
                     <Select
                       name="dependecyId"
                       options={dependenciesList}
+                      onBlur={handleBlur}
                       onChange={(option) =>
                         setDependenciesOption({
                           ...dependenciesOption,
@@ -315,7 +358,11 @@ function MailForm() {
                       }
                       placeholder="Seleccione una opción..."
                       isSearchable
+                  
                     />
+                    {touched.dependenciesOption && errors.dependenciesOption && (
+                        <span>{errors.dependenciesOption}</span>
+                      )}
                   </div>
 
                   <div className="form-group col-md-6 flex-column d-flex">
@@ -329,6 +376,7 @@ function MailForm() {
                     <Select
                       name="groupId"
                       options={groupList}
+                      onBlur={handleBlur}
                       onChange={(option) =>
                         setGroupOption({
                           ...groupOption,
@@ -341,29 +389,40 @@ function MailForm() {
                   </div>
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
-                      Fecha de Solicitud
+                      Fecha de Solicitud <span className="obligatorio">*</span>
                       <input
                         className="form-control"
                         type="date"
                         onBlur={handleBlur}
                         name="dateSolicitud"
                         onChange={handleChange}
-                        value={values.dateSolicitud}
+                        value={dateSolicitud}
                       />
                     </label>
+                    <small className="form-text text-danger">
+                      {touched.dateSolicitud && errors.dateSolicitud && (
+                        <span>{errors.dateSolicitud}</span>
+                      )}
+                    </small>
                   </div>
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
-                      Fecha de Vinculacion
+                      Fecha de Vinculacion{" "}
+                      <span className="obligatorio">*</span>
                       <input
                         className="form-control"
                         type="date"
                         onBlur={handleBlur}
                         name="dateInicial"
                         onChange={handleChange}
-                        value={values.dateInicial}
+                        value={dateInicial}
                       />
                     </label>
+                    <small className="form-text text-danger">
+                      {touched.dateInicial && errors.dateInicial && (
+                        <span>{errors.dateInicial}</span>
+                      )}
+                    </small>
                   </div>
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
@@ -373,9 +432,14 @@ function MailForm() {
                         type="date"
                         name="dateFinal"
                         onChange={handleChange}
-                        value={values.dateFinal}
+                        value={dateFinal}
                       />
                     </label>
+                    <small className="form-text text-danger">
+                      {touched.dateFinal && errors.dateFinal && (
+                        <span>{errors.dateFinal}</span>
+                      )}
+                    </small>
                   </div>
                 </fieldset>
 

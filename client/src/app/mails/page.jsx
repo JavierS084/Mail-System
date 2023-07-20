@@ -36,7 +36,7 @@ function Mail() {
   return (
     <div>
       <Tabs
-        defaultActiveKey="addmail"
+        defaultActiveKey="listMail"
         id="uncontrolled-tab-example"
         className="mb-3"
       >

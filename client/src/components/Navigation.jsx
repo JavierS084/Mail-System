@@ -117,13 +117,30 @@ export default function Navigation() {
                 <Link className="dropdown-item" href="/mail-type">
                   Tipo de Correo
                 </Link>
-                <Link className="dropdown-item" href="#">
-                  Something else here
+                
+              </div>
+            </li>
+            <li className="nav-item dropdown">
+              <Link
+                className="nav-link dropdown-toggle"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Administracion2
+              </Link>
+              <div className="dropdown-menu">
+                <Link className="dropdown-item" href="/users">
+                  Usuarios
                 </Link>
                 <div className="dropdown-divider"></div>
-                <Link className="dropdown-item" href="#">
-                  Separated link
+                <Link className="dropdown-item" href="/config">
+                  Configuraciones
                 </Link>
+               
+                
               </div>
             </li>
             <li className="nav-item">

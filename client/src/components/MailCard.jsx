@@ -91,7 +91,7 @@ export default function MailCard({ mails }) {
           <table className="table table-hover mx-auto mt-2">
             <thead>
               <tr>
-                <th scope="col">Accion</th>
+                <th scope="col"></th>
                 <th scope="col">ID</th>
                 <th scope="col" onClick={() => Orden("id")}>
                   Correo
@@ -100,9 +100,9 @@ export default function MailCard({ mails }) {
                 <th className="col">Grupo</th>
                 <th className="col">Tipo de Correo</th>
                 <th className="col">Formato </th>
-                <th className="col">Fecha de Solicitud</th>
-                <th className="col">Fecha de Inicio</th>
-                <th className="col">Fecha de Fin</th>
+                <th className="col">Solicitud</th>
+                <th className="col">Inicio</th>
+                <th className="col">Fin</th>
               </tr>
             </thead>
 
@@ -133,6 +133,7 @@ export default function MailCard({ mails }) {
                   <td>{mail.mailType.tipo}</td>
                   <td>{mail.request.solicitud}</td>
                   <td>{mail.dateSolicitud}</td>
+                  <td>{mail.dateInicial}</td>
                   {output >= mail.dateFinal ? (
                     <td id="fechared">{mail.dateFinal}</td>
                   ) : (

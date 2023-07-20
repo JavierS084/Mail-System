@@ -49,7 +49,7 @@ function Request() {
             <article>{renderlista()}</article>
           </div>
         </Tab>
-        <Tab eventKey="addDependency" title="Crear Solicitud">
+        <Tab eventKey="addDependency" title="Crear Grupos">
           <div
             className="tab-pane fade active show"
             id="createRequest"
