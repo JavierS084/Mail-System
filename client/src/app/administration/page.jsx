@@ -6,6 +6,7 @@ import Tabs from "react-bootstrap/Tabs";
 import { useAdministrations } from "@/context/AdministrationContext";
 import AdministrationForm from "@/components/AdministrationForm";
 import AdministrationCard from "@/components/AdministrationCard";
+import AdministrationNotification from "@/components/AdministrationNotification";
 
 function AdmPage() {
   const { administrations, loadUsers, msg} = useAdministrations();
@@ -51,7 +52,9 @@ function AdmPage() {
         <Tab eventKey="crearUsers" title="Crear Usuarios">
           <AdministrationForm />
         </Tab>
-        <Tab eventKey="roles" title="Roles"></Tab>
+        <Tab eventKey="notification" title="Notificacion">
+            <AdministrationNotification/>
+        </Tab>
         <Tab eventKey="administracion" title="Administracion"></Tab>
       </Tabs>
     </div>

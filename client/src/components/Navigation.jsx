@@ -120,29 +120,7 @@ export default function Navigation() {
                 
               </div>
             </li>
-            <li className="nav-item dropdown">
-              <Link
-                className="nav-link dropdown-toggle"
-                data-bs-toggle="dropdown"
-                href="#"
-                role="button"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Administracion2
-              </Link>
-              <div className="dropdown-menu">
-                <Link className="dropdown-item" href="/users">
-                  Usuarios
-                </Link>
-                <div className="dropdown-divider"></div>
-                <Link className="dropdown-item" href="/config">
-                  Configuraciones
-                </Link>
-               
-                
-              </div>
-            </li>
+          
             <li className="nav-item">
               <Link className="nav-link" href="/administration">
                 Administracion

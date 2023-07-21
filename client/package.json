@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.0",
     "@tabler/icons-react": "^2.20.0",
     "axios": "^1.4.0",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.3",
     "formik": "^2.4.0",
     "next": "13.4.3",
+    "nodemailer": "^6.9.4",
     "react": "18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "18.2.0",

@@ -13,7 +13,7 @@ export default function Home() {
         id="uncontrolled-tab-example"
         className="mb-3"
       >
-        <Tab eventKey="listaUsers" title="Buscar Correos">
+        <Tab eventKey="listaUsers" title="Dashboard">
           <div
             className="tab-pane fade active show"
             id="listaUsers"

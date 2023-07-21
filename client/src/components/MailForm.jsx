@@ -69,8 +69,9 @@ function MailForm() {
 
   useEffect(() => {
     const loadmail = async () => {
-      if (params && params.uuid) {
-        const mail = await gtMail(params.uuid);
+      if (params && params.id) {
+        const mail = await gtMail(params.id);
+        console.log(mail)
         setMail({
           user: mail.user,
           solicitante: mail.solicitante,
@@ -124,6 +125,7 @@ function MailForm() {
 
   useEffect(() => {
     updateProps();
+   
   }, [
     typeOption,
     groupOption,
@@ -146,7 +148,7 @@ function MailForm() {
     setTypeOption([]);
     setDependenciesOption([]);
   };
-/*
+  /*
   function handleSubmit(event) {
     event.preventDefault();
     if (!typeOption.mailTypeId) {
@@ -158,14 +160,15 @@ function MailForm() {
     }
 
     // Aquí puedes enviar el formulario
-  }*/
+  }
 
   function handleBlur(event) {
     const value = event.target.value;
-    if (!typeRequestList.some((option) => option.requestId === value)) {
+    console.log(value)
+    if (!typeRequestList.some((option) => option.requestId === value.requestId)) {
       alert('Por favor seleccione una opción válida');
     }
-  }
+  }*/
 
   return (
     <div className="card">
@@ -191,10 +194,7 @@ function MailForm() {
               </span>
             ));
           }
-          console.log(values.requestOption)
-          if (!requestOption) {
-            errores.requestOption = "Por favor ingrese el tipo de Solicitud";
-          }
+
           if (!values.dateSolicitud) {
             errores.dateSolicitud = "Por favor ingrese la Fecha de Solicitud";
           }
@@ -203,6 +203,12 @@ function MailForm() {
           } else if (values.dateInicial < values.dateSolicitud) {
             errores.dateInicial =
               "La Fecha de Vinculacion no puede ser anterior a la Fecha de Solicitud";
+          } else if (
+            values.dateInicial &&
+            values.dateInicial > values.dateFinal
+          ) {
+            errores.dateInicial =
+              "La Fecha de Vinculacion no Puede ser Superior a la Fecha de Desvinculacion";
           }
 
           if (values.dateFinal && values.dateFinal < values.dateInicial) {
@@ -214,14 +220,14 @@ function MailForm() {
         onSubmit={async (values, actions) => {
           if (params.uuid) {
             toast.success(
-              "El usuario " + values.name + " se ha actualizado correctamente"
+              "El usuario " + values.user + " se ha actualizado correctamente"
             );
             router.push("/mails");
           } else {
             await crMail(values);
 
             toast.success(
-              "El usuario " + values.name + " se ha guardado correctamente"
+              "El usuario " + values.user + " se ha guardado correctamente"
             );
           }
           setMail({
@@ -237,7 +243,14 @@ function MailForm() {
           });
         }}
       >
-        {({ handleChange, isSubmitting, errors, touched, handleSubmit }) => (
+        {({
+          handleChange,
+          isSubmitting,
+          errors,
+          touched,
+          handleSubmit,
+          handleBlur,
+        }) => (
           <Form onSubmit={handleSubmit}>
             <div className="justify-content-center">
               <div className="form-group p-4">
@@ -281,6 +294,7 @@ function MailForm() {
                       }}
                       value={user}
                       onBlur={handleBlur}
+                      required
                     />
                     <small className="form-text text-danger">
                       {touched.user && errors.user && (
@@ -307,7 +321,13 @@ function MailForm() {
                       }}
                       placeholder="Seleccione una opción..."
                       isSearchable
+                      required
                     />
+                    <small className="form-text text-danger">
+                      {touched.typeOption && errors.typeOption && (
+                        <span>{errors.typeOption}</span>
+                      )}
+                    </small>
                   </div>
 
                   <div className="form-group col-md-6 flex-column d-flex">
@@ -321,19 +341,19 @@ function MailForm() {
                       name="requestId"
                       options={typeRequestList}
                       onBlur={handleBlur}
-                      onChange={(option) =>{
+                      onChange={(option) => {
                         setRequestOption({
                           ...requestOption,
                           requestId: option.requestId,
-                        })
+                        });
                         handleChange;
-                      }
-                      }
+                      }}
                       placeholder="Seleccione una opción..."
                       isSearchable
+                      required
                     />
                     <small className="form-text text-danger">
-                    {touched.requestOption && errors.requestOption && (
+                      {touched.requestOption && errors.requestOption && (
                         <span>{errors.requestOption}</span>
                       )}
                     </small>
@@ -358,9 +378,10 @@ function MailForm() {
                       }
                       placeholder="Seleccione una opción..."
                       isSearchable
-                  
+                      required
                     />
-                    {touched.dependenciesOption && errors.dependenciesOption && (
+                    {touched.dependenciesOption &&
+                      errors.dependenciesOption && (
                         <span>{errors.dependenciesOption}</span>
                       )}
                   </div>
@@ -397,6 +418,7 @@ function MailForm() {
                         name="dateSolicitud"
                         onChange={handleChange}
                         value={dateSolicitud}
+                        required
                       />
                     </label>
                     <small className="form-text text-danger">
@@ -407,7 +429,7 @@ function MailForm() {
                   </div>
                   <div className="form-group col-md-6 flex-column d-flex">
                     <label className="form-label mt-4">
-                      Fecha de Vinculacion{" "}
+                      Fecha de Vinculacion
                       <span className="obligatorio">*</span>
                       <input
                         className="form-control"
@@ -416,6 +438,7 @@ function MailForm() {
                         name="dateInicial"
                         onChange={handleChange}
                         value={dateInicial}
+                        required
                       />
                     </label>
                     <small className="form-text text-danger">
@@ -433,6 +456,7 @@ function MailForm() {
                         name="dateFinal"
                         onChange={handleChange}
                         value={dateFinal}
+                        onBlur={handleBlur}
                       />
                     </label>
                     <small className="form-text text-danger">
