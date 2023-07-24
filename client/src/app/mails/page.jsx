@@ -10,11 +10,9 @@ function Mail() {
   const { mails, loadMails, msg } = useMails();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      loadMails();
-    }, 1000);
-
-    return () => clearTimeout(timer);
+  
+    loadMails();
+    
   }, [msg]);
 
   function renderlista() {

@@ -6,10 +6,10 @@ import Tabs from "react-bootstrap/Tabs";
 import { useAdministrations } from "@/context/AdministrationContext";
 import AdministrationForm from "@/components/AdministrationForm";
 import AdministrationCard from "@/components/AdministrationCard";
-import AdministrationNotification from "@/components/AdministrationNotification";
+//import AdministrationNotification from "@/components/AdministrationNotification";
 
 function AdmPage() {
-  const { administrations, loadUsers, msg} = useAdministrations();
+  const { administrations, loadUsers, msg } = useAdministrations();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -17,7 +17,6 @@ function AdmPage() {
     }, 1000);
     return () => clearTimeout(timer);
   }, [msg]);
-
 
   function renderlista() {
     if (administrations.length === 0) {
@@ -34,29 +33,29 @@ function AdmPage() {
   }
 
   return (
-    <div>
-      <Tabs
-        defaultActiveKey="listaUsers"
-        id="uncontrolled-tab-example"
-        className="mb-3"
-      >
-        <Tab eventKey="listaUsers" title="Lista de Usuarios">
-          <div
-            className="tab-pane fade active show"
-            id="listaUsers"
-            role="tabpanel"
-          >
-            {renderlista()}
-          </div>
-        </Tab>
-        <Tab eventKey="crearUsers" title="Crear Usuarios">
-          <AdministrationForm />
-        </Tab>
-        <Tab eventKey="notification" title="Notificacion">
-            <AdministrationNotification/>
-        </Tab>
-        <Tab eventKey="administracion" title="Administracion"></Tab>
-      </Tabs>
+    <div className="card">
+      <div className="card-body">
+        <Tabs
+          defaultActiveKey="listaUsers"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="listaUsers" title="Lista de Usuarios">
+            <div
+              className="tab-pane fade active show"
+              id="listaUsers"
+              role="tabpanel"
+            >
+              {renderlista()}
+            </div>
+          </Tab>
+          <Tab eventKey="crearUsers" title="Crear Usuarios">
+            <AdministrationForm />
+          </Tab>
+          <Tab eventKey="notification" title="Notificacion"></Tab>
+          <Tab eventKey="administracion" title="Administracion"></Tab>
+        </Tabs>
+      </div>
     </div>
   );
 }

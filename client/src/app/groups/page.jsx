@@ -6,7 +6,6 @@ import GroupCard from "@/components/GroupsCard";
 import GroupForm from "@/components/GroupsForm";
 import { useGroups } from "@/context/GroupsContext";
 
-
 function Request() {
   const { groups, loadGroups, msg } = useGroups();
 
@@ -24,7 +23,6 @@ function Request() {
         <div className="card">
           <div className="card-body">
             <h1 className="card-title">No existe Grupos disponibles</h1>
-            
           </div>
         </div>
       );
@@ -34,32 +32,33 @@ function Request() {
   }
 
   return (
-    <div>
-      <Tabs
-        defaultActiveKey="groupsList"
-        id="uncontrolled-tab-example"
-        className="mb-3"
-      >
-        <Tab eventKey="groupsList" title="Grupos">
-          <div
-            className="tab-pane fade active show"
-            id="listaGrupos"
-            role="tabpanel"
-          >
-            <article>{renderlista()}</article>
-          </div>
-        </Tab>
-        <Tab eventKey="addDependency" title="Crear Grupos">
-          <div
-            className="tab-pane fade active show"
-            id="createRequest"
-            role="tabpanel"
-          >
-            {<GroupForm />}
-          </div>
-        </Tab>
-        
-      </Tabs>
+    <div className="card">
+      <div className="card-body">
+        <Tabs
+          defaultActiveKey="groupsList"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="groupsList" title="Grupos">
+            <div
+              className="tab-pane fade active show"
+              id="listaGrupos"
+              role="tabpanel"
+            >
+              <article>{renderlista()}</article>
+            </div>
+          </Tab>
+          <Tab eventKey="addDependency" title="Crear Grupos">
+            <div
+              className="tab-pane fade active show"
+              id="createRequest"
+              role="tabpanel"
+            >
+              {<GroupForm />}
+            </div>
+          </Tab>
+        </Tabs>
+      </div>
     </div>
   );
 }

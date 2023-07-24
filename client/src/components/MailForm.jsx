@@ -12,7 +12,7 @@ import { useGroups } from "@/context/GroupsContext";
 import { useDependencies } from "@/context/DependenciesContext";
 
 function MailForm() {
-  const { mails, crMail, upMail, gtMail, msg } = useMails();
+  const { mails, crMail, upMail, gtMail, msg, gp } = useMails();
 
   const { requests, loadRequests } = useRequests();
   const { mailTypes, loadTypes } = useMailTypes();
@@ -53,45 +53,6 @@ function MailForm() {
     requestId: "",
   });
 
-  const updateProps = () => {
-    setMail({
-      ...mail,
-      mailTypeId: typeOption.mailTypeId,
-      groupId: groupOption.groupId,
-      dependencyId: dependenciesOption.dependencyId,
-      requestId: requestOption.requestId,
-      user: user,
-      dateFinal: dateFinal,
-      dateSolicitud: dateSolicitud,
-      dateInicial: dateInicial,
-    });
-  };
-
-
-  useEffect(() => {
-    const loadmail = async () => {
-      if (params && params.id) {
-        const mail = await gtMail(params.id);
-
-        setUser(mail.user);
-        setDateInicial(mail.dateInicial);
-        setDateFinal(mail.dateFinal);
-        setDateSolicitud(mail.dateSolicitud);
-        const mailType = mailTypes.find(type => type.id === mail.mailTypeId);
-        setTypeOption({ mailTypeId: mail.mailTypeId, label: mailType.tipo });
-    
-        /*  
-        setMail({
-         
-          solicitante: mail.solicitante,
-          requestId: mail.requestId,
-          dependencyId: mail.dependencyId,
-          groupId: mail.groupId,
-        });*/
-      }
-    };
-    loadmail();
-  }, []);
   //efecto para la actualizacion y obtencion de datos para el select de los distintos componentes
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -128,52 +89,38 @@ function MailForm() {
     return () => clearTimeout(timer);
   }, [requests.length, groups.length, mailTypes.length, dependencies.length]);
 
+  const updateProps = () => {
+    setMail({
+      ...mail,
+      mailTypeId: typeOption.mailTypeId,
+      dependencyId: dependenciesOption.dependencyId,
+      groupId: groupOption.groupId,
+      requestId: requestOption.requestId,
+      user: user,
+      dateFinal: dateFinal,
+      dateSolicitud: dateSolicitud,
+      dateInicial: dateInicial,
+    });
+  };
+
   useEffect(() => {
     updateProps();
-   
-  }, [
-    typeOption,
-    groupOption,
-    requestOption,
-    dependenciesOption,
-    user,
-    dateFinal,
-    dateInicial,
-    dateSolicitud,
-  ]);
+  }, [user, dateFinal, dateSolicitud, dateInicial]);
 
   const clearInput = () => {
-    setMail([]);
-    setDateFinal();
-    setGroupOption([]);
-    setDateInicial();
-    setDateSolicitud();
-    setUser("");
-    setRequestOption([]);
-    setTypeOption([]);
-    setDependenciesOption([]);
+    const timer = setTimeout(() => {
+      setMail([]);
+      setDateFinal();
+      setGroupOption([]);
+      setDateInicial();
+      setDateSolicitud();
+      setUser("");
+      setRequestOption([]);
+      setTypeOption([]);
+      setDependenciesOption([]);
+    }, 100);
+    return () => clearTimeout(timer);
   };
-  /*
-  function handleSubmit(event) {
-    event.preventDefault();
-    if (!typeOption.mailTypeId) {
-      alert("Por favor seleccione una opción de Tipo de Correo");
-    } else if (!requestOption.requestId) {
-      alert("Por favor seleccione una opción de Tipo de Solicitud");
-    } else if (!dependenciesOption.dependencyId) {
-      alert("Por favor seleccione una opción de las Dependencias");
-    }
-
-    // Aquí puedes enviar el formulario
-  }
-
-  function handleBlur(event) {
-    const value = event.target.value;
-    console.log(value)
-    if (!typeRequestList.some((option) => option.requestId === value.requestId)) {
-      alert('Por favor seleccione una opción válida');
-    }
-  }*/
 
   return (
     <div className="card">
@@ -223,19 +170,7 @@ function MailForm() {
           return errores;
         }}
         onSubmit={async (values, actions) => {
-          if (params.uuid) {
-            upMail(values, params.id)
-            toast.success(
-              "El usuario " + values.user + " se ha actualizado correctamente"
-            );
-            await upMail(params.id, values);
-          } else {
-            await crMail(values);
-
-            toast.success(
-              "El usuario " + values.user + " se ha guardado correctamente"
-            );
-          }
+          await crMail(values);
           setMail({
             user: "",
             solicitante: "",
@@ -300,7 +235,6 @@ function MailForm() {
                       }}
                       value={user}
                       onBlur={handleBlur}
-                      required
                     />
                     <small className="form-text text-danger">
                       {touched.user && errors.user && (
@@ -376,12 +310,13 @@ function MailForm() {
                       name="dependecyId"
                       options={dependenciesList}
                       onBlur={handleBlur}
-                      onChange={(option) =>
+                      onChange={(option) => {
                         setDependenciesOption({
                           ...dependenciesOption,
                           dependencyId: option.dependencyId,
-                        })
-                      }
+                        });
+                        handleChange;
+                      }}
                       placeholder="Seleccione una opción..."
                       isSearchable
                       required
@@ -404,12 +339,12 @@ function MailForm() {
                       name="groupId"
                       options={groupList}
                       onBlur={handleBlur}
-                      onChange={(option) =>
+                      onChange={(option) => {
                         setGroupOption({
                           ...groupOption,
                           groupId: option.groupId,
-                        })
-                      }
+                        });
+                      }}
                       placeholder="Seleccione una opción..."
                       isSearchable
                     />
@@ -422,7 +357,10 @@ function MailForm() {
                         type="date"
                         onBlur={handleBlur}
                         name="dateSolicitud"
-                        onChange={handleChange}
+                        onChange={(option) => {
+                          setDateSolicitud(option.target.value);
+                          handleChange;
+                        }}
                         value={dateSolicitud}
                         required
                       />
@@ -442,7 +380,10 @@ function MailForm() {
                         type="date"
                         onBlur={handleBlur}
                         name="dateInicial"
-                        onChange={handleChange}
+                        onChange={(option) => {
+                          setDateInicial(option.target.value);
+                          handleChange;
+                        }}
                         value={dateInicial}
                         required
                       />
@@ -460,7 +401,10 @@ function MailForm() {
                         className="form-control"
                         type="date"
                         name="dateFinal"
-                        onChange={handleChange}
+                        onChange={(option) => {
+                          setDateFinal(option.target.value);
+                          handleChange;
+                        }}
                         value={dateFinal}
                         onBlur={handleBlur}
                       />
@@ -478,7 +422,8 @@ function MailForm() {
                     className="btn btn-success"
                     type="submit"
                     disabled={isSubmitting}
-                    onClick={clearInput}
+                    onChange={clearInput}
+                    onClick={updateProps}
                   >
                     {isSubmitting ? "Guardando..." : "Guardar y Continuar"}
                   </button>

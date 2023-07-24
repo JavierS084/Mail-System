@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useEffect, useState } from "react";
 import { Formik, Form } from "formik";
 import { useRouter, useParams } from "next/navigation";
@@ -59,7 +59,6 @@ export function GroupForm() {
             !/^[.a-za-z0-9]+@(?:[a-za-z0-9]+\.)+[a-za-z]+$/.test(values.email)
           ) {
             errores.email = "Por favor ingrese un Correo valido";
-          
           }
           if (!values.description) {
             errores.description = "Por favor ingrese el nombre del Grupo ";
@@ -84,9 +83,7 @@ export function GroupForm() {
           } else {
             await crGroup(values);
             toast.success(
-              "El grupo " +
-                values.description +
-                " se ha guardado correctamente"
+              "El grupo " + values.description + " se ha guardado correctamente"
             );
           }
 
@@ -102,8 +99,9 @@ export function GroupForm() {
           handleChange,
           handleSubmit,
           values,
-          isSubmitting,
+          errors,
           touched,
+          isSubmitting,
           handleBlur,
         }) => (
           <Form onSubmit={handleSubmit}>
@@ -121,6 +119,11 @@ export function GroupForm() {
                       onChange={handleChange}
                       value={values.email}
                     />
+                    <small className="form-text text-danger">
+                      {touched.email && errors.email && (
+                        <span>{errors.email}</span>
+                      )}
+                    </small>
                   </div>
 
                   <div className="form-group ">
@@ -134,6 +137,11 @@ export function GroupForm() {
                       onChange={handleChange}
                       value={values.description}
                     />
+                    <small className="form-text text-danger">
+                      {touched.description && errors.description && (
+                        <span>{errors.description}</span>
+                      )}
+                    </small>
                   </div>
 
                   <div className="form-group flex-column d-flex">
@@ -148,6 +156,11 @@ export function GroupForm() {
                         value={values.dateInicialG}
                       />
                     </label>
+                    <small className="form-text text-danger">
+                      {touched.dateInicialG && errors.dateInicialG && (
+                        <span>{errors.dateInicialG}</span>
+                      )}
+                    </small>
                   </div>
                   <div className="form-group flex-column d-flex">
                     <label className="form-label mt-4">
@@ -167,7 +180,6 @@ export function GroupForm() {
                       type="submit"
                       disabled={isSubmitting}
                       onClick={clearInput}
-                      
                     >
                       {isSubmitting ? "Guardando..." : "Guardar y Continuar"}
                     </button>

@@ -44,7 +44,7 @@ export const MailProvider = ({ children }) => {
     const crMail = async (mail) => {
         try {
             const response = await createMail(mail);
-            console.log(response);
+            setMsg(response.data.msg)
             if(response.status === 201){
                 
                 setGp(true);
@@ -59,7 +59,7 @@ export const MailProvider = ({ children }) => {
     const upMail = async (id, newFields) => {
         try {
             const response = await updateMail(id, newFields);
-            console.log(response)
+            setMsg(response.data.msg)
             if(response.status === 200){
                
                 setGp(true);
@@ -76,6 +76,7 @@ export const MailProvider = ({ children }) => {
         try {
             const response = await deleteMail(id);
             setMails(mails.filter(mail => mail.id !== id));
+            setMsg(response.data.msg)
             console.log(response);
         } catch (error) {
 

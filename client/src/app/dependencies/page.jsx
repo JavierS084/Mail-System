@@ -33,40 +33,42 @@ export default function DependenciasPage() {
   }
 
   return (
-    <div>
-      <Tabs
-        defaultActiveKey="listDependencies"
-        id="uncontrolled-tab-example"
-        className="mb-3"
-      >
-        <Tab eventKey="listDependencies" title="Dependencias">
-          <div
-            className="tab-pane fade active show"
-            id="listadependencias"
-            role="tabpanel"
-          >
-            <article>{renderlista()}</article>
-          </div>
-        </Tab>
-        <Tab eventKey="addDependency" title="Crear Dependencia">
-          <div
-            className="tab-pane fade active show"
-            id="createdependencies"
-            role="tabpanel"
-          >
-            {<DependenciesForm />}
-          </div>
-        </Tab>
-        <Tab eventKey="searchDependencia" title="Buscar Dependencia">
-          <div
-            className="tab-pane fade active show"
-            id="searchdependencias"
-            role="tabpanel"
-          >
-            {<DependenciesSearch />}
-          </div>
-        </Tab>
-      </Tabs>
+    <div className="card">
+      <div className="card-body">
+        <Tabs
+          defaultActiveKey="listDependencies"
+          id="uncontrolled-tab-example"
+          className="mb-3"
+        >
+          <Tab eventKey="listDependencies" title="Dependencias">
+            <div
+              className="tab-pane fade active show"
+              id="listadependencias"
+              role="tabpanel"
+            >
+              <article>{renderlista()}</article>
+            </div>
+          </Tab>
+          <Tab eventKey="addDependency" title="Crear Dependencia">
+            <div
+              className="tab-pane fade active show"
+              id="createdependencies"
+              role="tabpanel"
+            >
+              {<DependenciesForm />}
+            </div>
+          </Tab>
+          <Tab eventKey="searchDependencia" title="Buscar Dependencia">
+            <div
+              className="tab-pane fade active show"
+              id="searchdependencias"
+              role="tabpanel"
+            >
+              {<DependenciesSearch />}
+            </div>
+          </Tab>
+        </Tabs>
+      </div>
     </div>
   );
 }

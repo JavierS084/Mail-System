@@ -25,6 +25,10 @@ export default function MailExpired({ mails }) {
   const handleShow = () => setShow(true);
   const router = useRouter();
 
+  
+  const mailFilter = mails.filter((mail) => output >= mail.dateFinal);
+  console.log(mailFilter);
+ 
   useEffect(() => {
     //pasando los 10 segundos se deshabilita el boton eliminar
     const timer = setTimeout(() => {
@@ -72,24 +76,32 @@ export default function MailExpired({ mails }) {
       <div className="card ">
         <div className="card-body">
           <h2 className="card-title">Correos para Dar de Baja</h2>
-          <div className="col-md-5">
-            <button
-              onClick={handleShow}
-              disabled={!accion}
-              type="button"
-              className="btn btn-danger m-1"
-            >
-              Eliminar
-            </button>
-            <button
-              type="button"
-              className="btn btn-warning m-1 px-4"
-              disabled={!accion}
-              onClick={() => router.push(`/mails/edit/${select}`)}
-            >
-              Editar
-            </button>
+          <div className="row">
+            <div className="justify-content-start">
+              <button
+                onClick={handleShow}
+                disabled={!accion}
+                type="button"
+                className="btn btn-danger m-1"
+              >
+                Eliminar
+              </button>
+              <button
+                type="button"
+                className="btn btn-warning m-1 px-4"
+                disabled={!accion}
+                onClick={() => router.push(`/mails/edit/${select}`)}
+              >
+                Editar
+              </button>
+            </div>
           </div>
+          <div className="row justify-content-end">
+            <div className="col-4">
+              Total de Correos Expirados: {mailFilter.length}
+            </div>
+          </div>
+
           <table className="table table-hover mx-auto mt-2">
             <thead>
               <tr>
@@ -109,41 +121,34 @@ export default function MailExpired({ mails }) {
             </thead>
 
             <tbody>
-              {mails.map((mail) =>
-                output >= mail.dateFinal ? (
-                    <tr scope="row" key={mail.id}>
-                    <td>
-                      <input
-                        onChange={handleChange}
-                        className="form-check-input"
-                        type="checkbox"
-                        value={mail.id}
-                        id="flexCheckDefault"
-                        key={mail.id}
-                      />
-                    </td>
+              {mailFilter.map((mail) => (
+                <tr scope="row" key={mail.id}>
+                  <td>
+                    <input
+                      onChange={handleChange}
+                      className="form-check-input"
+                      type="checkbox"
+                      value={mail.id}
+                      id="flexCheckDefault"
+                      key={mail.id}
+                    />
+                  </td>
 
-                    <td>{mail.id}</td>
-                    <td>{mail.user}</td>
-                    <td>{mail.dependency.dependencia}</td>
-                    {mail.group ? (
-                      <td className="ml-2 text-center">
-                        {mail.group.description}
-                      </td>
-                    ) : (
-                      <td>Sin Grupo</td>
-                    )}
-                    <td>{mail.mailType.tipo}</td>
-                    <td>{mail.request.solicitud}</td>
-                    <td>{mail.dateSolicitud}</td>
-                    <td>{mail.dateInicial}</td>
-                    <td>{mail.dateFinal}</td>
-                 
-                  </tr>
-                ) : (
-                  <>No hay Correos expirados</>
-                )
-              )}
+                  <td>{mail.id}</td>
+                  <td>{mail.user}</td>
+                  <td>{mail.dependency.dependencia}</td>
+                  {mail.group ? (
+                    <td className="ml-2 text-center">{mail.group.description}</td>
+                  ) : (
+                    <td>Sin Grupo</td>
+                  )}
+                  <td>{mail.mailType.tipo}</td>
+                  <td>{mail.request.solicitud}</td>
+                  <td>{mail.dateSolicitud}</td>
+                  <td>{mail.dateInicial}</td>
+                  <td>{mail.dateFinal}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
