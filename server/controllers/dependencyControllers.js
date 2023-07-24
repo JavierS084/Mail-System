@@ -1,10 +1,13 @@
 import Dependencies from '../models/dependencyModel.js'
+import { Sequelize } from "sequelize";
+
 
 export const getAllDependencies = async (req, res) => {
     try {
         let response;
         response = await Dependencies.findAll({
-            attributes: ['id', 'dependencia', 'createdAt'],
+            attributes: ['id', 'dependencia',
+            [Sequelize.fn('date_format', Sequelize.col('createdAt'), '%d-%m-%Y'), 'createdAt'], ],
 
         });
         console.table(response);

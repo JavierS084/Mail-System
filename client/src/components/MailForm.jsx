@@ -67,22 +67,27 @@ function MailForm() {
     });
   };
 
+
   useEffect(() => {
     const loadmail = async () => {
       if (params && params.id) {
         const mail = await gtMail(params.id);
-        console.log(mail)
+
+        setUser(mail.user);
+        setDateInicial(mail.dateInicial);
+        setDateFinal(mail.dateFinal);
+        setDateSolicitud(mail.dateSolicitud);
+        const mailType = mailTypes.find(type => type.id === mail.mailTypeId);
+        setTypeOption({ mailTypeId: mail.mailTypeId, label: mailType.tipo });
+    
+        /*  
         setMail({
-          user: mail.user,
+         
           solicitante: mail.solicitante,
-          dateInicial: mail.dateInicial,
-          dateFinal: mail.dateFinal,
-          dateSolicitud: mail.dateSolicitud,
-          mailTypeId: mail.mailTypeId,
           requestId: mail.requestId,
           dependencyId: mail.dependencyId,
           groupId: mail.groupId,
-        });
+        });*/
       }
     };
     loadmail();
@@ -219,10 +224,11 @@ function MailForm() {
         }}
         onSubmit={async (values, actions) => {
           if (params.uuid) {
+            upMail(values, params.id)
             toast.success(
               "El usuario " + values.user + " se ha actualizado correctamente"
             );
-            router.push("/mails");
+            await upMail(params.id, values);
           } else {
             await crMail(values);
 

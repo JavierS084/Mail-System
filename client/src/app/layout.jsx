@@ -2,10 +2,6 @@ import "../styles/globals.css";
 import { Inter } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import Script from "next/script";
-import { Toaster } from "./Toaster";
-
-//import Head from "next/head";
-
 import { AdministrationProvider } from "@/context/AdministrationContext";
 import { DependenciesProvider } from "@/context/DependenciesContext";
 import { RequestsProvider } from "@/context/RequestsContext";
