@@ -12,7 +12,7 @@ import { useGroups } from "@/context/GroupsContext";
 import { useDependencies } from "@/context/DependenciesContext";
 
 function MailForm() {
-  const { mails, crMail, upMail, gtMail, msg, gp } = useMails();
+  const { mails, crMail,   msg, gp } = useMails();
 
   const { requests, loadRequests } = useRequests();
   const { mailTypes, loadTypes } = useMailTypes();
@@ -109,15 +109,17 @@ function MailForm() {
 
   const clearInput = () => {
     const timer = setTimeout(() => {
-      setMail([]);
-      setDateFinal();
-      setGroupOption([]);
-      setDateInicial();
-      setDateSolicitud();
-      setUser("");
-      setRequestOption([]);
-      setTypeOption([]);
-      setDependenciesOption([]);
+      if (gp === true) {
+        setMail([]);
+        setDateFinal();
+        setGroupOption([]);
+        setDateInicial();
+        setDateSolicitud();
+        setUser("");
+        setRequestOption([]);
+        setTypeOption([]);
+        setDependenciesOption([]);
+      }
     }, 100);
     return () => clearTimeout(timer);
   };
@@ -171,6 +173,7 @@ function MailForm() {
         }}
         onSubmit={async (values, actions) => {
           await crMail(values);
+          clearInput();
           setMail({
             user: "",
             solicitante: "",
@@ -422,7 +425,7 @@ function MailForm() {
                     className="btn btn-success"
                     type="submit"
                     disabled={isSubmitting}
-                    onChange={clearInput}
+                    onChange={handleChange}
                     onClick={updateProps}
                   >
                     {isSubmitting ? "Guardando..." : "Guardar y Continuar"}

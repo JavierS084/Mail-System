@@ -25,10 +25,9 @@ export default function MailExpired({ mails }) {
   const handleShow = () => setShow(true);
   const router = useRouter();
 
-  
   const mailFilter = mails.filter((mail) => output >= mail.dateFinal);
   console.log(mailFilter);
- 
+
   useEffect(() => {
     //pasando los 10 segundos se deshabilita el boton eliminar
     const timer = setTimeout(() => {
@@ -97,9 +96,7 @@ export default function MailExpired({ mails }) {
             </div>
           </div>
           <div className="row justify-content-end">
-            <div className="col-4">
-              Total de Correos Expirados: {mailFilter.length}
-            </div>
+            Total de Correos Expirados: {mailFilter.length}
           </div>
 
           <table className="table table-hover mx-auto mt-2">
@@ -138,7 +135,9 @@ export default function MailExpired({ mails }) {
                   <td>{mail.user}</td>
                   <td>{mail.dependency.dependencia}</td>
                   {mail.group ? (
-                    <td className="ml-2 text-center">{mail.group.description}</td>
+                    <td className="ml-2 text-center">
+                      {mail.group.description}
+                    </td>
                   ) : (
                     <td>Sin Grupo</td>
                   )}
