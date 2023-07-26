@@ -5,6 +5,7 @@ import Tabs from "react-bootstrap/Tabs";
 import MailForm from "@/components/MailForm";
 import MailCard from "@/components/MailCard";
 import { useMails } from "@/context/MailsContext";
+import MailSearch from "@/components/MailSearch";
 
 function Mail() {
   const { mails, loadMails, msg } = useMails();
@@ -53,6 +54,15 @@ function Mail() {
               role="tabpanel"
             >
               {<MailForm />}
+            </div>
+          </Tab>
+          <Tab eventKey="searchMail" title="Buscar Correo">
+            <div
+              className="tab-pane fade active show"
+              id="searchCorreos"
+              role="tabpanel"
+            >
+              <article>{<MailSearch/>}</article>
             </div>
           </Tab>
         </Tabs>

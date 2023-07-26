@@ -26,7 +26,6 @@ export default function MailExpired({ mails }) {
   const router = useRouter();
 
   const mailFilter = mails.filter((mail) => output >= mail.dateFinal);
-  console.log(mailFilter);
 
   useEffect(() => {
     //pasando los 10 segundos se deshabilita el boton eliminar
